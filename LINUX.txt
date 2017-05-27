@@ -1,0 +1,23 @@
+Qubes OS Intro
+https://www.qubes-os.org/intro/
+
+Getting Started with Qubes
+https://www.qubes-os.org/getting-started/
+
+Top 10 Security Linux Distros
+https://www.tecmint.com/best-security-centric-linux-distributions-of-2016/
+http://www.techradar.com/news/10-best-linux-distros-for-privacy-fiends-and-security-buffs
+
+KDE Plasma
+https://userbase.kde.org/Plasma
+https://www.kde.org/applications/
+https://www.kde.org/products
+
+Mint
+https://www.linuxmint.com/documentation/user-guide/Cinnamon/english_18.0.pdf
+
+GNOME
+https://www.gnome.org/gnome-3/
+
+Subgraph OS
+https://subgraph.com/sgos-handbook/sgos_handbook.pdf
