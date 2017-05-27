@@ -1,0 +1,45 @@
+[
+    {
+        "outputFile": "C:\\Users\\Kristiana Rendon\\Desktop\\newnewnew\\android-samples-master\\tutorials\\MapWithMarker\\app\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 45,
+                    "endOffset": 96
+                },
+                "from": {
+                    "file": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\3666588ecdd3baf0ac0e64c85a480a100a99c117\\output\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 229,
+                        "endColumn": 45,
+                        "endOffset": 270
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 101,
+                    "endColumn": 104,
+                    "endOffset": 201
+                },
+                "from": {
+                    "file": "C:\\Users\\Kristiana Rendon\\Desktop\\newnewnew\\android-samples-master\\tutorials\\MapWithMarker\\app\\build\\generated\\res\\resValues\\androidTest\\debug\\values\\generated.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 160,
+                        "endColumn": 104,
+                        "endOffset": 260
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\33d47b5ecafaa989d843995afdfe608296a1d186\output\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c0bd6ffb002a85b5e7cad29f8558d1cc59539679">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_32c8017be4d327a8d071d3fad73f28e838d70a75\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.0.1\support-annotations-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a09194311f8f89c3e6db09d79f50897a889d615e">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.0.1_51ab30143fbff50b8779a9626e6d377c1c44e7c7\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c81547acba028e3926f58a9dd9c107fd122e2f86">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_2e13d54774aa10b324646ae4786a0e13269c06e8\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\a178ea786e4e584159d95a6484a86afc22bfaa03\output\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_1a9bb5ff4fedde779478f138d19b42214593a593\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\bf3c6d023f70853e4b83a7f5df5a8e9058fc2497\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3b236883e0df6002cabb01ce57d00a5b1e5de610">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_6ad47458c9479b786d6e45d5cc1033325b664650\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\33d47b5ecafaa989d843995afdfe608296a1d186\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="26c6eef571592c91f29e56fda0bac73321de0c92">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_9ea4cf3bfef2043195d79dd224a35f25a2146bd2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\7a1acae09309a9a5d0742073a5a2e9ce8bd6ae8a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="00d4c8eebf2b681073c72a26bd0849549e51c7cb">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e0c04e1feef0b1bb88241aa8aa8b565e0e341a64\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\df0e8e598c09a3a140a0a10db2be1cfa017108c4\output\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3af8cc51ef7088e56f132780da8c0bd858b6a6ad">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_de9f9695c659006885bd3942a9e0d7b8a60a6e1c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\be41c723aa0be860efa8afcbe244eef41280a025\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="772bed2d992b67b9d0327f766cc95cd63031dcd3">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_f9817f8564e096a52f55940af880ae3883b216f9\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\6dcb2eda6661228785d8466ab9f0fa5c5909b323\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="297d4bcf6ed4e747a1bf7d0d094a2d911a8d3a8e">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a693a1123f2f0fbd85a878b07a5fd2e929081f80\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\728050937370843fcb4106f9c897baf130f6be6d\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b24e1c688744078e1fa833ffadf696794761bbe5">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a7d59e4eb0025896b5c34b0d84752ab8ce04e1ca\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="caff8e51a24901cfc9cd7e1cf83d84f4cb0c103b">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_b5c2cb804ecee4a206ddc6105366dafb39cbf291\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\a178ea786e4e584159d95a6484a86afc22bfaa03\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="bc7e99e8d0fc279a05aa91378530f467ad62d443">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_70bbd18bf314bf5bafe6a1cbec64b7917fd5415e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\fed6582662f45720ae9e56ee8e662245d02fae11\output\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f83b00041ecfba705603fec40363416c7de69719">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_8bbe07509f02168224c3610ebdd663b86b5b7002\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\0c19f7f95658613bafb92c363a67717da0aefc17\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_6c72d2208ac809d84788e9b18989d38e4f44aa7f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\df0e8e598c09a3a140a0a10db2be1cfa017108c4\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_498ac3cfe4a90d76ef713cb113c95d65bd37e073\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\fed6582662f45720ae9e56ee8e662245d02fae11\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6a1479afe9f1b3645e1cd9a87318976893472818">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_f7dfe9394cb5f09a26c1be72e46e4954446b0e12\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\7a1acae09309a9a5d0742073a5a2e9ce8bd6ae8a\output\jars\libs\internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c5b7145fb34779b6639147b8f2f8dd77c0db771b">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.1_e48b76dc8112091d68daf42101eda0146eab5aee\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\f02c1d366055d79716bbd688fdd3264054e0ec7e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c1b6ab157e8e12cb08b9ee82bb5e3c5d22632eb3">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7ef8e0e4d0acb01e35e29e7b46caba06e1639b0e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Kristiana Rendon\.android\build-cache\69a1a8256f870c0ff7a0517f1b6f596a2b7bdea0\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f7ac4b327fdb9e2ee386f5adc46164927658de4b">
+        <dex dex="C:\Users\Kristiana Rendon\Desktop\newnewnew\android-samples-master\tutorials\MapWithMarker\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_4c4615ba8c8ae67763e4c9872730c4d9e04253da\classes.dex" />
+    </item>
+
+</items>
