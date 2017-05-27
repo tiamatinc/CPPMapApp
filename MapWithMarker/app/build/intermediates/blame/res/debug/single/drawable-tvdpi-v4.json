@@ -4,6 +4,14 @@
         "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\203be1bf73f0920c373b06c1b1335f4fdc789c57\\output\\res\\drawable-tvdpi-v4\\ic_plusone_small_off_client.png"
     },
     {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\drawable-tvdpi-v4\\ic_plusone_medium_off_client.png",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\203be1bf73f0920c373b06c1b1335f4fdc789c57\\output\\res\\drawable-tvdpi-v4\\ic_plusone_medium_off_client.png"
+    },
+    {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\drawable-tvdpi-v4\\ic_plusone_standard_off_client.png",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\203be1bf73f0920c373b06c1b1335f4fdc789c57\\output\\res\\drawable-tvdpi-v4\\ic_plusone_standard_off_client.png"
+    },
+    {
         "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\newnewnew\\android-samples-master\\tutorials\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\drawable-tvdpi-v4\\ic_plusone_tall_off_client.png",
         "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\203be1bf73f0920c373b06c1b1335f4fdc789c57\\output\\res\\drawable-tvdpi-v4\\ic_plusone_tall_off_client.png"
     },
@@ -14,5 +22,13 @@
     {
         "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\newnewnew\\android-samples-master\\tutorials\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\drawable-tvdpi-v4\\ic_plusone_medium_off_client.png",
         "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\203be1bf73f0920c373b06c1b1335f4fdc789c57\\output\\res\\drawable-tvdpi-v4\\ic_plusone_medium_off_client.png"
+    },
+    {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\drawable-tvdpi-v4\\ic_plusone_small_off_client.png",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\203be1bf73f0920c373b06c1b1335f4fdc789c57\\output\\res\\drawable-tvdpi-v4\\ic_plusone_small_off_client.png"
+    },
+    {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\drawable-tvdpi-v4\\ic_plusone_tall_off_client.png",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\203be1bf73f0920c373b06c1b1335f4fdc789c57\\output\\res\\drawable-tvdpi-v4\\ic_plusone_tall_off_client.png"
     }
 ]

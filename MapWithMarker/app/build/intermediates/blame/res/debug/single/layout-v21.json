@@ -4,6 +4,26 @@
         "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\69a1a8256f870c0ff7a0517f1b6f596a2b7bdea0\\output\\res\\layout-v21\\notification_template_icon_group.xml"
     },
     {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\69a1a8256f870c0ff7a0517f1b6f596a2b7bdea0\\output\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\69a1a8256f870c0ff7a0517f1b6f596a2b7bdea0\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\69a1a8256f870c0ff7a0517f1b6f596a2b7bdea0\\output\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\place_autocomplete_fragment.xml",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\06438d65e92698a3ea80961a227da9e494ff7cfb\\output\\res\\layout-v21\\place_autocomplete_fragment.xml"
+    },
+    {
+        "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\CPP-Map-Final\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\69a1a8256f870c0ff7a0517f1b6f596a2b7bdea0\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
         "merged": "C:\\Users\\Kristiana Rendon\\Desktop\\newnewnew\\android-samples-master\\tutorials\\MapWithMarker\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\place_autocomplete_fragment.xml",
         "source": "C:\\Users\\Kristiana Rendon\\.android\\build-cache\\06438d65e92698a3ea80961a227da9e494ff7cfb\\output\\res\\layout-v21\\place_autocomplete_fragment.xml"
     },
