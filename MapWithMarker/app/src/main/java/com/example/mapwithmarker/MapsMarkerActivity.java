@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,7 +35,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationListener;
+
 
 import org.json.JSONObject;
 
@@ -48,13 +53,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
  * An activity that displays a Google map with a marker (pin) to indicate a particular location.
  */
-public class MapsMarkerActivity extends AppCompatActivity
-        implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
+public class MapsMarkerActivity extends AppCompatActivity implements
+        OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     //ARRAYLIST TO STORE THE POINTS OF INTEREST FOR EACH TAG
     ArrayList<Marker> FoodTag = new ArrayList<>();
@@ -74,8 +79,19 @@ public class MapsMarkerActivity extends AppCompatActivity
     // Create an instance of GoogleAPIClient.
     GoogleApiClient mGoogleApiClient = null;
 
+    //CREATE TOOLS FOR LOCATION MANAGER
+    //private LocationManager locationManager = null;
+    private LocationListener locationListener = null;
+
     //CURRENT LOCATION
     private Location mLastLocation = null;
+    //CREATE LOCATION REQUEST
+    private LocationRequest mLocationRequest = null;
+
+    //CREATE POLYLINE FOR ROUTE
+    private Polyline lastRoute = null;
+    private Polyline update = null;
+
     //DESTINATION LOCATION
     private Marker dest = null;
     //DEFAULT LOCATION
@@ -235,12 +251,46 @@ public class MapsMarkerActivity extends AppCompatActivity
 
         if (mGoogleApiClient.isConnected()) {
             Log.d("clientConnected", "YES");
-            }
-            Log.d("clientConnected", "NO");
+        }
+        Log.d("clientConnected", "NO");
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
 
+        createLocationRequest();
+        createLocationListener();
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, locationListener);
+    }
+
+    private void createLocationListener() {
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if(directionsActive) {
+                    mLastLocation = location;
+                    if(directionsActive) {
+                        LatLng endPoint = dest.getPosition();
+
+                        // Calculate Route
+                        LatLng user = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                        String url = getUrl(user, endPoint);
+                        Log.d("onMapClick", url.toString());
+                        FetchUrl fetchUrl = new FetchUrl();
+
+                        fetchUrl.execute(url);
+                        Log.d("locationChecked", "YES");
+                    }
+                }
+            }
+        };
+    }
+
+    private void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(5000);
+        mLocationRequest.setFastestInterval(500);
     }
 
     @Override
@@ -336,7 +386,7 @@ public class MapsMarkerActivity extends AppCompatActivity
         LatLngBounds CalPolyPomona = new LatLngBounds(
                 new LatLng(34.048039, -117.827632), new LatLng(34.063650, -117.810913));
         // Constrain the camera target to the CalPolyPomona bounds.
-        googleMap.setLatLngBoundsForCameraTarget(CalPolyPomona);
+        //googleMap.setLatLngBoundsForCameraTarget(CalPolyPomona);
 
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(CalPolyPomona.getCenter(), 1));
@@ -1292,22 +1342,28 @@ public class MapsMarkerActivity extends AppCompatActivity
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
                     LatLng position = new LatLng(lat, lng);
+                    Log.d("onPostExecute", "Position: "+lat+", "+lng);
 
                     points.add(position);
                 }
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(10);
-                lineOptions.color(Color.RED);
+                lineOptions.width(20);
+                lineOptions.color(Color.BLUE);
 
                 Log.d("onPostExecute","onPostExecute lineoptions decoded");
-
             }
 
             // Drawing polyline in the Google Map for the i-th route
             if(lineOptions != null) {
-                googleMap.addPolyline(lineOptions);
+                if(lastRoute == null) {
+                    lastRoute = googleMap.addPolyline(lineOptions);
+                } else {
+                    update = googleMap.addPolyline(lineOptions);
+                    lastRoute.remove();
+                    lastRoute = update;
+                }
             }
             else {
                 Log.d("onPostExecute","without Polylines drawn");
