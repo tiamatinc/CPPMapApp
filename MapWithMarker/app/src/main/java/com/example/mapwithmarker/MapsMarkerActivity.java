@@ -1,5 +1,6 @@
 package com.example.mapwithmarker;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.Context;
 import android.graphics.Color;
@@ -49,7 +50,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -75,7 +78,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
     //CREATE A GOOGLE MAP
     GoogleMap googleMap = null;
-
+    List<String> tags = new ArrayList<String>();
+    String specificTag = "";
     // Create an instance of GoogleAPIClient.
     GoogleApiClient mGoogleApiClient = null;
 
@@ -326,10 +330,11 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Intent intent = getIntent();
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -337,7 +342,12 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                     .addApi(LocationServices.API)
                     .build();
         }
+        if(!(intent.getStringArrayListExtra(SearchActivity.TAG_LIST) == null) &&
+            !intent.getStringArrayListExtra(SearchActivity.TAG_LIST).isEmpty())
+                 tags = intent.getStringArrayListExtra(SearchActivity.TAG_LIST);
 
+        if(!(specificTag == null) && !specificTag.equals("") )
+                 specificTag = intent.getStringExtra(SearchActivity.SPECIFIC_SEARCH);
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
@@ -346,8 +356,133 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
+    private void filterOnTags()
+    {
+      for(String tag : tags)
+      {
+          switch (tag)
+          {
+              case "Food":
+                  for(Marker mark : FoodTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+                  }
+                  break;
+              case "Art":
+                  for(Marker mark : ArtTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+
+                  }
+                  break;
+              case "Athletic":
+                  for(Marker mark : AthleticTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                  }
+                  break;
+              case "Housing":
+                  for(Marker mark : HousingTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                  }
+                  break;
+              case "Market":
+                  for(Marker mark : MarketTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                  }
+                  break;
+              case "Parking":
+                  for(Marker mark : ParkingTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                  }
+                  break;
+              case "Resource":
+                  for(Marker mark : ResourcesTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                  }
+                  break;
+              case "Scenic":
+                  for(Marker mark : ScenicTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                  }
+                  break;
+              case "Social":
+                  for(Marker mark : SocialTag)
+                  {
+                      LatLng loc = mark.getPosition();
+                      mark.setVisible(true);
+                      googleMap.addMarker(new MarkerOptions()
+                              .position(loc)
+                              .title(mark.getTitle())
+                              .snippet(mark.getSnippet())
+                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                  }
+                  break;
+          }
+      }
+
+    }
+    private void filterOnKeyWord()
+    {
+
+    }
     /**
      * Manipulates the map when it's available.
      * The API invokes this callback when the map is ready to be used.
@@ -357,12 +492,14 @@ public class MapsMarkerActivity extends AppCompatActivity implements
      * Play services inside the SupportMapFragment. The API invokes this method after the user has
      * installed Google Play services and returned to the app.
      */
+    boolean markersAdded = false;
     @Override
     public void onMapReady(GoogleMap thisMap) {
         googleMap = thisMap;
         Log.d("order: ", "onMapReady");
         //USE MARKER VISIBILITY
         //EX) CLICK SHOW ALL FOOD AND ONLY FOOD MARKERS WILL APPEAR
+        boolean filtering = false;
 
         // Set a preference for minimum and maximum zoom.
         googleMap.setMinZoomPreference(15.5f);
@@ -397,18 +534,37 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         // and move the map's camera to the same location.
         LatLng CPP = new LatLng(34.056484, -117.821605);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(CPP, 15));
+        if(!tags.isEmpty())
+            filtering = true;
+        if(!specificTag.equals(""))
+            filtering = true;
 
-        if(!directionsActive) addMarkers();
+        if(!directionsActive){
+            addMarkers();
+            if(!markersAdded) updateTags(); //add lists to hashmap
+            markersAdded = true; //there's actions we only want to perform once when addMarkers is called and
+                                    //we only want to call updateTags() to add them to the hashmap once.
+
+            if(filtering)
+            {
+                googleMap.clear();
+                if(!tags.isEmpty())
+                    filterOnTags();
+                if(!specificTag.equals(""))
+                    filterOnKeyWord();
+            }
+        }
 
         googleMap.setOnInfoWindowClickListener(new ClickForDirectionsListener());
         googleMap.setInfoWindowAdapter(new MarkerWindow());
 
 
-        //ADD ALL TAG ARRAYLIST INTO THE HASHMAP WITH THEIR RESPECTIVE KEYS
-        updateTags();
+
+
     }
 
     private void addMarkers() {
+
         //// Food Areas ////////////////////////////////////////////////////////////////
 
         LatLng LosOlivos = new LatLng(34.062360, -117.821519);
@@ -427,7 +583,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "1:30 - 7:30 pm\n" +
                         "Late night options available Mon- Wed, Sun: 9 pm - Midnight;\n"));
         LosOlivosInfo.setTag("FOOD");
-        FoodTag.add(LosOlivosInfo);
+        if(!markersAdded) FoodTag.add(LosOlivosInfo);
 
         LatLng TheDen = new LatLng(34.053992, -117.818052);
         Marker TheDenInfo = googleMap.addMarker(new MarkerOptions()
@@ -444,7 +600,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "Sunday\n" +
                         "10:00 am - 12:00 am\n"));
         TheDenInfo.setTag("FOOD SOCIAL");
-        FoodTag.add(TheDenInfo);
+        if(!markersAdded) FoodTag.add(TheDenInfo);
 
 
         LatLng VistaMarket = new LatLng(34.053899, -117.817946);
@@ -462,8 +618,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "Sunday\n" +
                         "10:00 am - 1:00 am\n"));
         VistaMarketInfo.setTag("FOOD MARKET");
-        FoodTag.add(VistaMarketInfo);
-        MarketTag.add(VistaMarketInfo);
+        if(!markersAdded) FoodTag.add(VistaMarketInfo);
+        if(!markersAdded) MarketTag.add(VistaMarketInfo);
 
         Marker MarketplaceInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057755, -117.823262))
@@ -471,8 +627,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .snippet("Campus Center Marketplace, located at Building 97, is in the heart of the Cal Poly Pomona campus, southeast of the College of Letters, Arts, and Social Sciences (Bldg. 5) and southwest of the College of Education and Integrative Studies (Bldg. 6). Campus Center Marketplace offers a wide variety of dining venues and has indoor and outdoor seating areas." +
                         "\n Hours may vary"));
         MarketplaceInfo.setTag("FOOD MARKET");
-        FoodTag.add(MarketplaceInfo);
-        MarketTag.add(MarketplaceInfo);
+        if(!markersAdded) FoodTag.add(MarketplaceInfo);
+        if(!markersAdded) MarketTag.add(MarketplaceInfo);
 
         Marker StarbucksLibInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057578, -117.821447))
@@ -488,15 +644,15 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "Sunday\n" +
                         "12:00 pm - 9:00 pm\n"));
         StarbucksLibInfo.setTag("FOOD SOCIAL");
-        FoodTag.add(StarbucksLibInfo);
-        SocialTag.add(StarbucksLibInfo);
+        if(!markersAdded) FoodTag.add(StarbucksLibInfo);
+        if(!markersAdded) SocialTag.add(StarbucksLibInfo);
 
         Marker BrewWorksInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.049896, -117.814977))
                 .title("Innovation Brew Works")
                 .snippet("Innovation Brew Works is a café and brewery located on the Cal Poly Pomona campus at the Center for Training, Technology, and Incubation (CTTI) in Innovation Village. We are open to the public."));
         BrewWorksInfo.setTag("FOOD");
-        FoodTag.add(BrewWorksInfo);
+        if(!markersAdded) FoodTag.add(BrewWorksInfo);
 
         Marker FarmStoreInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.048408, -117.819184))
@@ -504,7 +660,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .snippet("Local and organic produce. Craft sodas, plants, wine, and gifts. Features a line of products from the campus farm, orchards, and nursery. \n" +
                         "Open every day: 10:00 AM - 6:00PM\n"));
         FarmStoreInfo.setTag("FOOD");
-        FoodTag.add(FarmStoreInfo);
+        if(!markersAdded) FoodTag.add(FarmStoreInfo);
 
         //// Visual POIs //////////////////////////////////////////////////////
 
@@ -514,7 +670,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Japanese Garden")
                 .snippet("Japanese garden with large koi pond and seating. Scenic spot to sit and enjoy."));
         JapaneseGardenInfo.setTag("SCENIC");
-        ScenicTag.add(JapaneseGardenInfo);
+        if(!markersAdded) ScenicTag.add(JapaneseGardenInfo);
 
         LatLng RoseGarden = new LatLng(34.060829, -117.82034);
         Marker RoseGardenInfo = googleMap.addMarker(new MarkerOptions()
@@ -522,7 +678,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Rose Garden")
                 .snippet("Famous Rose Garden that can be viewed from the Kellogg Mansion or walked through at any hour. Scenic gazebo resting place at the center. Note: Plucking the roses will get you fined."));
         RoseGardenInfo.setTag("SCENIC");
-        ScenicTag.add(RoseGardenInfo);
+        if(!markersAdded) ScenicTag.add(RoseGardenInfo);
 
         LatLng DuckPond = new LatLng(34.061024, -117.821583);
         Marker DuckPondInfo = googleMap.addMarker(new MarkerOptions()
@@ -530,7 +686,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Duck Pond")
                 .snippet("The duck pond is home to turtles, koi, carp, and of course ducks. Enjoy the water feature at the center of the pond while turtles sunbathe next to you. Open to visitors at all hours."));
         DuckPondInfo.setTag("SCENIC");
-        ScenicTag.add(DuckPondInfo);
+        if(!markersAdded) ScenicTag.add(DuckPondInfo);
 
         LatLng EngineeringMeadow = new LatLng(34.059103, -117.821392);
         Marker EngineeringMeadowInfo = googleMap.addMarker(new MarkerOptions()
@@ -538,7 +694,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Engineering Meadow")
                 .snippet("Come relax at the Engineering Meadow between classes."));
         EngineeringMeadowInfo.setTag("SCENIC");
-        ScenicTag.add(EngineeringMeadowInfo);
+        if(!markersAdded) ScenicTag.add(EngineeringMeadowInfo);
 
         LatLng HorseshoeHill = new LatLng(34.059103, -117.821392);
         Marker HorseshoeHillInfo = googleMap.addMarker(new MarkerOptions()
@@ -546,7 +702,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Horseshoe Hill")
                 .snippet("Horseshoe Hill overlooks the CLA Building and some of the pastureland the university's Arabian horses call home. Horseshoe Hill is also one of the main locations for major concerts put on by ASI's Bronco Events and Activities Team."));
         HorseshoeHillInfo.setTag("SCENIC");
-        ScenicTag.add(HorseshoeHillInfo);
+        if(!markersAdded) ScenicTag.add(HorseshoeHillInfo);
 
         LatLng VoorhisPark = new LatLng(34.059963, -117.81876);
         Marker VoorhisParkInfo = googleMap.addMarker(new MarkerOptions()
@@ -554,7 +710,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Voorhis Park")
                 .snippet("Avaibility may vary due to ongoing construction."));
         VoorhisParkInfo.setTag("SCENIC");
-        ScenicTag.add(VoorhisParkInfo);
+        if(!markersAdded) ScenicTag.add(VoorhisParkInfo);
 
 
         LatLng BroncoCommons = new LatLng(34.05514, -117.820247);
@@ -563,8 +719,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bronco Commons")
                 .snippet("Grass field located in front of the BRIC with a cement stage used to hold many of the university’s events, such as BroncoFusion"));
         BroncoCommonsInfo.setTag("SCENIC SOCIAL");
-        ScenicTag.add(BroncoCommonsInfo);
-        SocialTag.add(BroncoCommonsInfo);
+        if(!markersAdded) ScenicTag.add(BroncoCommonsInfo);
+        if(!markersAdded) SocialTag.add(BroncoCommonsInfo);
 
         LatLng ScolinosField = new LatLng(34.053873, -117.815944);
         Marker ScolinosFieldInfo = googleMap.addMarker(new MarkerOptions()
@@ -572,7 +728,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Scolinos Field")
                 .snippet("University’s baseball field, located near the residential suites. Games for the university team are held here occasionally--to follow the season schedule, check http://broncoathletics.com/schedule.aspx?path=baseball."));
         ScolinosFieldInfo.setTag("SCENIC");
-        ScenicTag.add(ScolinosFieldInfo);
+        if(!markersAdded) ScenicTag.add(ScolinosFieldInfo);
 
         LatLng KelloggTrackStadium = new LatLng(34.052271, -117.816857);
         Marker KelloggTrackStadiumInfo = googleMap.addMarker(new MarkerOptions()
@@ -580,7 +736,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Kellogg Track & Soccer Stadium")
                 .snippet("University’s soccer field with a running track surrounding it. A small section in this area also contains a practice field for pole vaulting."));
         KelloggTrackStadiumInfo.setTag("ATHLETIC");
-        AthleticTag.add(KelloggTrackStadiumInfo);
+        if(!markersAdded) AthleticTag.add(KelloggTrackStadiumInfo);
 
         LatLng AuxAthleticsField = new LatLng(34.052794, -117.818419);
         Marker AuxAthleticsFieldInfo = googleMap.addMarker(new MarkerOptions()
@@ -588,7 +744,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Auxiliary Athletics Field")
                 .snippet("Home to the Cal Poly Pomona men's and women's soccer teams, as well as the men's and women's track and field squads."));
         AuxAthleticsFieldInfo.setTag("ATHLETIC");
-        AthleticTag.add(AuxAthleticsFieldInfo);
+        if(!markersAdded) AthleticTag.add(AuxAthleticsFieldInfo);
 
         LatLng UniQuad = new LatLng(34.058537, -117.82364);
         Marker UniQuadInfo = googleMap.addMarker(new MarkerOptions()
@@ -596,8 +752,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("University Quad")
                 .snippet("Grassy area- feel free to relax during your breaks and enjoy the sights and sounds of campus life."));
         UniQuadInfo.setTag("SCENIC SOCIAL");
-        ScenicTag.add(UniQuadInfo);
-        SocialTag.add(UniQuadInfo);
+        if(!markersAdded) ScenicTag.add(UniQuadInfo);
+        if(!markersAdded) SocialTag.add(UniQuadInfo);
 
 
         LatLng UniPark = new LatLng(34.056744, -117.820972);
@@ -606,8 +762,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("University Park")
                 .snippet("University Park is host to many student activities including the Hot Dog Caper, noontime concerts, movie night and more. The Bronco Student Center is a central gathering place for the campus community and is home to the student government offices, Center Court food court, the Wellness Center, Visitor Center and Bronco Fitness Center."));
         UniParkInfo.setTag("SCENIC SOCIAL");
-        ScenicTag.add(UniParkInfo);
-        SocialTag.add(UniParkInfo);
+        if(!markersAdded) ScenicTag.add(UniParkInfo);
+        if(!markersAdded) SocialTag.add(UniParkInfo);
 
         LatLng BioTrekGarden = new LatLng(34.057201, -117.826465);
         Marker BioTrekGardenInfo = googleMap.addMarker(new MarkerOptions()
@@ -615,7 +771,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("BioTrek Ethnobotany Garden")
                 .snippet("Developed out of concern for today's threat to plant and animal species and the viability of the biosphere, BioTrek is an education-based project that serves college students and reaches out to community members. The 107,000-square foot complex has an aquatic learning center, rainforest and labs for biotechnology research, education and enterprise."));
         BioTrekGardenInfo.setTag("SCENIC");
-        ScenicTag.add(BioTrekGardenInfo);
+        if(!markersAdded) ScenicTag.add(BioTrekGardenInfo);
 
         LatLng BioTrekCenter = new LatLng(34.058232, -117.826072);
         Marker BioTrekCenterInfo = googleMap.addMarker(new MarkerOptions()
@@ -623,15 +779,15 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("BioTrek Learning Center")
                 .snippet("BioTrek is an educational enterprise of the Biological Sciences Department of California State Polytechnic University, Pomona. In its greenhouse, garden, and labs, it brings to students and the public both hands-on and electronic educational experiences of the tropical rainforest and California indigenous plants and people. "));
         BioTrekGardenInfo.setTag("SCENIC");
-        ScenicTag.add(BioTrekCenterInfo);
+        if(!markersAdded) ScenicTag.add(BioTrekCenterInfo);
 
         Marker TennisCourtsInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.052905, -117.820365))
                 .title("Campus Tennis Courts")
                 .snippet("Stop by our tennis courts and see what the CPP Tennis Club is planning! Hours and meeting times may vary"));
         TennisCourtsInfo.setTag("ATHLETIC SOCIAL");
-        AthleticTag.add(TennisCourtsInfo);
-        SocialTag.add(TennisCourtsInfo);
+        if(!markersAdded) AthleticTag.add(TennisCourtsInfo);
+        if(!markersAdded) SocialTag.add(TennisCourtsInfo);
 
         //// Numbered Bldgs /////////////////////////////////////////////////////////
 
@@ -641,7 +797,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 1")
                 .snippet("Administration Building. Also home to economics."));
         Bldg1Info.setTag("BUILDING 1");
-        BuildingTag.add(Bldg1Info);
+        if(!markersAdded) BuildingTag.add(Bldg1Info);
 
         LatLng Bldg2 = new LatLng(34.057701, -117.826681);
         Marker Bldg2Info = googleMap.addMarker(new MarkerOptions()
@@ -649,7 +805,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 2: College of Agriculture")
                 .snippet("Agriculture and Veterinary Services"));
         Bldg2Info.setTag("BUILDING 2");
-        BuildingTag.add(Bldg2Info);
+        if(!markersAdded) BuildingTag.add(Bldg2Info);
 
         LatLng Bldg3 = new LatLng(34.058079, -117.825733);
         Marker Bldg3Info = googleMap.addMarker(new MarkerOptions()
@@ -657,7 +813,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 3: Science Laboratory")
                 .snippet("College of Science Advising. Various science laboratories."));
         Bldg3Info.setTag("BUILDING 3");
-        BuildingTag.add(Bldg3Info);
+        if(!markersAdded) BuildingTag.add(Bldg3Info);
 
         LatLng Bldg4 = new LatLng(34.057483, -117.825513);
         Marker Bldg4Info = googleMap.addMarker(new MarkerOptions()
@@ -665,7 +821,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 4: Biotechnology Building")
                 .snippet("Center for Excellence in Mathematics and Science Teaching. Institute for Cellular and Molecular Biology."));
         Bldg4Info.setTag("BUILDING 4");
-        BuildingTag.add(Bldg4Info);
+        if(!markersAdded) BuildingTag.add(Bldg4Info);
 
         LatLng Bldg5 = new LatLng(34.057803, -117.824435);
         Marker Bldg5Info = googleMap.addMarker(new MarkerOptions()
@@ -673,7 +829,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 5: College of Letters, Arts, and Social Sciences")
                 .snippet("The College of Letters, Arts, and Social Sciences advances knowledge and learning in established academic disciplines in the humanities, social sciences, and performing arts. It provides introductory and advanced course work in more than 20 degree and certificate programs."));
         Bldg5Info.setTag("BUILDING 5");
-        BuildingTag.add(Bldg5Info);
+        if(!markersAdded) BuildingTag.add(Bldg5Info);
 
         LatLng Bldg6 = new LatLng(34.058616, -117.822804);
         Marker Bldg6Info = googleMap.addMarker(new MarkerOptions()
@@ -681,7 +837,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 6: College of Education and Integrated Studies")
                 .snippet("The College of Education and Integrative Studies is a learning community focused on meeting the present and future needs of students in our communities. We educate students to become highly qualified and significant leaders in our society. We are committed to the principles of diversity, ethics and social justice, and life-long learning. Central to our mission are innovative and integrative thinking, reflective practice, collaborative action, and learning by doing."));
         Bldg6Info.setTag("BUILDING 6");
-        BuildingTag.add(Bldg6Info);
+        if(!markersAdded) BuildingTag.add(Bldg6Info);
 
         LatLng Bldg7 = new LatLng(34.057087, -117.827385);
         Marker Bldg7Info = googleMap.addMarker(new MarkerOptions()
@@ -689,7 +845,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 7: College of Environmental Design")
                 .snippet("The College of Environmental Design aims to educate the next generation of architects, graphic designers, landscape architects, and urban planners – people who will strive to change the world, or at least their part of the world – using the “learn by doing” philosophy for which Cal Poly Pomona is well-known."));
         Bldg7Info.setTag("BUILDING 7");
-        BuildingTag.add(Bldg7Info);
+        if(!markersAdded) BuildingTag.add(Bldg7Info);
 
         LatLng Bldg8 = new LatLng(34.058554, -117.824719);
         Marker Bldg8Info = googleMap.addMarker(new MarkerOptions()
@@ -697,7 +853,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(Bldg8)
                 .title("Bldg 8: College of Science"));
         Bldg8Info.setTag("BUILDING 8");
-        BuildingTag.add(Bldg8Info);
+        if(!markersAdded) BuildingTag.add(Bldg8Info);
 
         LatLng Bldg9 = new LatLng(34.05947, -117.822552);
         Marker Bldg9Info = googleMap.addMarker(new MarkerOptions()
@@ -705,7 +861,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 9: College of Engineering")
                 .snippet("Students have opportunities to apply their knowledge to hands-on projects, collaborate with faculty members on research for a team-based learning experience, and participate in valuable internships and service-learning programs"));
         Bldg8Info.setTag("BUILDING 9");
-        BuildingTag.add(Bldg9Info);
+        if(!markersAdded) BuildingTag.add(Bldg9Info);
 
         LatLng Bldg13 = new LatLng(34.05883, -117.820771);
         Marker Bldg13Info = googleMap.addMarker(new MarkerOptions()
@@ -713,35 +869,35 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Bldg 13: Art Department and Engineering Annex")
                 .snippet("No further info available"));
         Bldg13Info.setTag("BUILDING 13");
-        BuildingTag.add(Bldg13Info);
+        if(!markersAdded) BuildingTag.add(Bldg13Info);
 
         Marker Bldg17 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060036, -117.821363))
                 .title("Bldg 17: Engineering Laboratories")
                 .snippet("No further info available"));
         Bldg17.setTag("BUILDING 17");
-        BuildingTag.add(Bldg17);
+        if(!markersAdded) BuildingTag.add(Bldg17);
 
         Marker Bldg24 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056836, -117.822951))
                 .title("Bldg 24: Music Building")
                 .snippet("In the Cal Poly Pomona tradition of \"learn by doing,\" music majors are given a variety of hands-on experiences through internships in the music industry, field experiences in teaching, and master classes with renowned artists. Our general education classes, such as Introduction to Music, Music Appreciation and World Music, as well as our ensembles are open to all university students, regardless of major."));
         Bldg24.setTag("BUILDING 24");
-        BuildingTag.add(Bldg24);
+        if(!markersAdded) BuildingTag.add(Bldg24);
 
         Marker Bldg26 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056957, -117.820378))
                 .title("Bldg 26: University Plaza")
                 .snippet("University Union Plaza was the original site of the Kellogg Arabian horse stables until the W.K. Kellogg Arabian Horse Center was built in 1974. The building was remodeled and became an extension of the University Union and a center for student organizations in 1981."));
         Bldg26.setTag("BUILDING 26");
-        BuildingTag.add(Bldg26);
+        if(!markersAdded) BuildingTag.add(Bldg26);
 
         Marker Bldg26A = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056717, -117.820551))
                 .title("Bldg 26A: Student Orientation Center")
                 .snippet("No further info available"));
         Bldg26A.setTag("BUILDING 26A");
-        BuildingTag.add(Bldg26A);
+        if(!markersAdded) BuildingTag.add(Bldg26A);
 
         //// Helpful Facilities //////////////////////////////////////////////////////
 
@@ -757,31 +913,31 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "Saturday -- Sunday\n" +
                         "9:00 am - 11:00 pm\t"));
         BRICInfo.setTag("ATHLETIC SOCIAL");
-        AthleticTag.add(BRICInfo);
-        SocialTag.add(BRICInfo);
+        if(!markersAdded) AthleticTag.add(BRICInfo);
+        if(!markersAdded) SocialTag.add(BRICInfo);
 
         Marker GymnasiumInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054195, -117.819188))
                 .title("CPP Kellogg Gymnasium")
                 .snippet("Opened in 1967, the Kellogg Gymnasium is the primary home of the powerful Bronco (NCAA Division II) Basketball team, and seats 4,765."));
         GymnasiumInfo.setTag("ATHLETIC SOCIAL");
-        AthleticTag.add(GymnasiumInfo);
-        SocialTag.add(GymnasiumInfo);
+        if(!markersAdded) AthleticTag.add(GymnasiumInfo);
+        if(!markersAdded) SocialTag.add(GymnasiumInfo);
 
         Marker IPolyInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.051013, -117.819499))
                 .title("iPoly High School Campus")
                 .snippet("nternational Polytechnic High School (iPoly) is a specialized project-based school. It provides students with a comprehensive high school (9-12) curriculum, as well as with a technological, cultural, and global foundation. As citizens of the world, graduates of iPoly are prepared to apply their global knowledge and experience toward assuming leadership roles in the community, nation, and world"));
         IPolyInfo.setTag("RESOURCES");
-        ResourcesTag.add(IPolyInfo);
+        if(!markersAdded) ResourcesTag.add(IPolyInfo);
 
         Marker BookstoreInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055987, -117.820445))
                 .title("Bronco Bookstore")
                 .snippet("On campus retailer that offers textbooks, school supplies, convenience items, clothing, and even technology. Hours vary throughout the year."));
         BookstoreInfo.setTag("RESOURCES MARKET");
-        ResourcesTag.add(BookstoreInfo);
-        MarketTag.add(BookstoreInfo);
+        if(!markersAdded) ResourcesTag.add(BookstoreInfo);
+        if(!markersAdded) MarketTag.add(BookstoreInfo);
 
         Marker BSCInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056549, -117.82146))
@@ -792,78 +948,79 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "Saturday 8:00 AM - 4:00 PM\n" +
                         "Sunday: Closed\n"));
         BSCInfo.setTag("RESOURCES");
-        ResourcesTag.add(BSCInfo);
+        if(!markersAdded) ResourcesTag.add(BSCInfo);
 
         Marker TheatreInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056696, -117.822208))
                 .title("CPP Theatre")
                 .snippet("lays and musicals put on by students throughout the year! Tickets are usually $10 with a student ID and $15 for general admission. Check in with the theatre website to see what is currently playing and available showtimes."));
         TheatreInfo.setTag("ART SCENIC");
-        ArtTag.add(TheatreInfo);
-        ScenicTag.add(TheatreInfo);
+        if(!markersAdded) ArtTag.add(TheatreInfo);
+        if(!markersAdded) ScenicTag.add(TheatreInfo);
 
         Marker LibraryInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057891, -117.82133))
                 .title("CPP University Library")
                 .snippet("The University Library, located in Building 15, is not only a place to type research papers, check out books, and study, but a place where you can grab a pick-me-up beverage or snack. Starbucks is located on the first floor of the University Library and can be accessed from inside or outside the building. Indoor and outdoor seating is available."));
         LibraryInfo.setTag("RESOURCES");
-        ResourcesTag.add(LibraryInfo);
+        if(!markersAdded) ResourcesTag.add(LibraryInfo);
+        if(!markersAdded) SocialTag.add(LibraryInfo);
 
         Marker CLAInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.059601, -117.820071))
                 .title("CLA Building")
                 .snippet("Clearly visible from the nearby freeways, the distinctly shaped triangular building is the most recognizable structure on the Cal Poly Pomona campus and widely considered a university icon. Antoine Predock, an Albuquerque-based architect, won an international competition to design the building, and completed its construction in 1992."));
         CLAInfo.setTag("RESOURCES");
-        ResourcesTag.add(CLAInfo);
+        if(!markersAdded) ResourcesTag.add(CLAInfo);
 
         Marker AlamitosInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062217, -117.818069))
                 .title("Alamitos Hall")
                 .snippet("The four red brick halls (Alamitos, Aliso, Encinitas and Montecito) have a similar design and layout. Each hall accommodates approximately 212 residents and staffed by five student Resident Advisors (RA) and a professional live-in Hall Coordinator. The Phase I halls feature a small community atmosphere, spacious lounges on the first two floors, and a common garden patio. Each floor is divided into two wings. The majority of floors are coed by alternate male and female wings. Accommodations are available in Encinitas Hall for students who have a mobility restriction. All halls have conveniently located laundry facilities. Each room measures approximately 11' x 15'."));
         AlamitosInfo.setTag("HOUSING");
-        HousingTag.add(AlamitosInfo);
+        if(!markersAdded) HousingTag.add(AlamitosInfo);
 
         Marker MontecitoInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062177, -117.81933))
                 .title("Montecito Hall")
                 .snippet("The four red brick halls (Alamitos, Aliso, Encinitas and Montecito) have a similar design and layout. Each hall accommodates approximately 212 residents and staffed by five student Resident Advisors (RA) and a professional live-in Hall Coordinator. The Phase I halls feature a small community atmosphere, spacious lounges on the first two floors, and a common garden patio. Each floor is divided into two wings. The majority of floors are coed by alternate male and female wings. Accommodations are available in Encinitas Hall for students who have a mobility restriction. All halls have conveniently located laundry facilities. Each room measures approximately 11' x 15'."));
         MontecitoInfo.setTag("HOUSING");
-        HousingTag.add(MontecitoInfo);
+        if(!markersAdded) HousingTag.add(MontecitoInfo);
 
         Marker AlisoInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.0629, -117.817805))
                 .title("Aliso Hall")
                 .snippet("The four red brick halls (Alamitos, Aliso, Encinitas and Montecito) have a similar design and layout. Each hall accommodates approximately 212 residents and staffed by five student Resident Advisors (RA) and a professional live-in Hall Coordinator. The Phase I halls feature a small community atmosphere, spacious lounges on the first two floors, and a common garden patio. Each floor is divided into two wings. The majority of floors are coed by alternate male and female wings. Accommodations are available in Encinitas Hall for students who have a mobility restriction. All halls have conveniently located laundry facilities. Each room measures approximately 11' x 15'."));
         AlisoInfo.setTag("HOUSING");
-        HousingTag.add(AlisoInfo);
+        if(!markersAdded) HousingTag.add(AlisoInfo);
 
         Marker EncinitasInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062315, -117.820574))
                 .title("Encinitas Hall")
                 .snippet("The four red brick halls (Alamitos, Aliso, Encinitas and Montecito) have a similar design and layout. Each hall accommodates approximately 212 residents and staffed by five student Resident Advisors (RA) and a professional live-in Hall Coordinator. The Phase I halls feature a small community atmosphere, spacious lounges on the first two floors, and a common garden patio. Each floor is divided into two wings. The majority of floors are coed by alternate male and female wings. Accommodations are available in Encinitas Hall for students who have a mobility restriction. All halls have conveniently located laundry facilities. Each room measures approximately 11' x 15'."));
         EncinitasInfo.setTag("HOUSING");
-        HousingTag.add(EncinitasInfo);
+        if(!markersAdded) HousingTag.add(EncinitasInfo);
 
         Marker CedritosInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061527, -117.821217))
                 .title("Cedritos Hall")
                 .snippet("Both Cedritos and Palmitas Halls have a similar design and layout. Each hall accommodates approximately 185 students and staffed by five student Resident Advisors (RA) and a professional live-in Hall Coordinator. These halls offer the same small community atmosphere and amenities as the Phase One buildings. The only differences are the room shapes and the slightly smaller common area. All halls have conveniently located laundry facilities. Each room measures approximately 12' x 14'."));
         CedritosInfo.setTag("HOUSING");
-        HousingTag.add(CedritosInfo);
+        if(!markersAdded) HousingTag.add(CedritosInfo);
 
         Marker PalmitasInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060547, -117.82233))
                 .title("Palmitas Hall")
                 .snippet("Both Cedritos and Palmitas Halls have a similar design and layout. Each hall accommodates approximately 185 students and staffed by five student Resident Advisors (RA) and a professional live-in Hall Coordinator. These halls offer the same small community atmosphere and amenities as the Phase One buildings. The only differences are the room shapes and the slightly smaller common area. All halls have conveniently located laundry facilities. Each room measures approximately 12' x 14'."));
         PalmitasInfo.setTag("HOUSING");
-        HousingTag.add(PalmitasInfo);
+        if(!markersAdded) HousingTag.add(PalmitasInfo);
 
         Marker LaCienegaInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060956, -117.821894))
                 .title("La Cienega Center")
                 .snippet("University Housing Services"));
         LaCienegaInfo.setTag("RESOUCES");
-        ResourcesTag.add(LaCienegaInfo);
+        if(!markersAdded) ResourcesTag.add(LaCienegaInfo);
 
         Marker EstrellasInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055368, -117.818887))
@@ -872,49 +1029,49 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "Hours:\n" +
                         "Front Desk: 8:00 AM - 7:00 PM\n"));
         EstrellasInfo.setTag("HOUSING");
-        HousingTag.add(EstrellasInfo);
+        if(!markersAdded) HousingTag.add(EstrellasInfo);
 
         Marker BonitaInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054808, -117.818608))
                 .title("Vista de las Bonita")
                 .snippet("One of the five student residential suites. Only residents of this suite have access to this building via key card. Contains a study hall, balcony overlook, and public laundry room."));
         BonitaInfo.setTag("HOUSING");
-        HousingTag.add(BonitaInfo);
+        if(!markersAdded) HousingTag.add(BonitaInfo);
 
         Marker SolInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054819, -117.818088))
                 .title("Vista del Sol")
                 .snippet("One of the five student residential suites. Only residents of this suite have access to this building via key card. Contains a study hall, balcony overlook, and public laundry room."));
         SolInfo.setTag("HOUSING");
-        HousingTag.add(SolInfo);
+        if(!markersAdded) HousingTag.add(SolInfo);
 
         Marker MontanasInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054275, -117.817637))
                 .title("Vista del Montanas")
                 .snippet("One of the five student residential suites. Only residents of this suite have access to this building via key card. Contains a study hall, balcony overlook, and public laundry room."));
         MontanasInfo.setTag("HOUSING");
-        HousingTag.add(MontanasInfo);
+        if(!markersAdded) HousingTag.add(MontanasInfo);
 
         Marker LunaInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.053659, -117.817095))
                 .title("Vista de las Luna")
                 .snippet("One of the five student residential suites. Only residents of this suite have access to this building via key card. Contains a study hall, balcony overlook, and public laundry room."));
         LunaInfo.setTag("HOUSING");
-        HousingTag.add(LunaInfo);
+        if(!markersAdded) HousingTag.add(LunaInfo);
 
         Marker RoseFloatInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060167, -117.808230))
                 .title("Rose Float Laboratory")
                 .snippet("Come visit the Rose Float Lab and see what students are up to!"));
         RoseFloatInfo.setTag("SCENIC");
-        ScenicTag.add(RoseFloatInfo);
+        if(!markersAdded) ScenicTag.add(RoseFloatInfo);
 
         Marker PumpkinsInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.049552, -117.818519))
                 .title("Agriscapes Pumpkin Field")
                 .snippet("Home to many local tourist attractions, such as the CPP Egg Hunt and the Halloween Pumpkin Patch"));
         PumpkinsInfo.setTag("SCENIC SOCIAL");
-        ScenicTag.add(PumpkinsInfo);
+        if(!markersAdded) ScenicTag.add(PumpkinsInfo);
 
         //// Parking Lots ////////////////////////////////////////////
 
@@ -923,196 +1080,196 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .title("Parking Lot A")
                 .snippet(""));
         LotA.setTag("PARKING");
-        ParkingTag.add(LotA);
+        if(!markersAdded) ParkingTag.add(LotA);
 
         Marker LotB = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.052753, -117.815283))
                 .title("Parking Lot B")
                 .snippet(""));
         LotB.setTag("PARKING");
-        ParkingTag.add(LotB);
+        if(!markersAdded) ParkingTag.add(LotB);
 
         Marker LotE1 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061486, -117.811566))
                 .title("Parking Lot E1")
                 .snippet(""));
         LotE1.setTag("PARKING");
-        ParkingTag.add(LotE1);
+        if(!markersAdded) ParkingTag.add(LotE1);
 
         Marker LotE2 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060748, -117.812650))
                 .title("Parking Lot E2")
                 .snippet(""));
         LotE2.setTag("PARKING");
-        ParkingTag.add(LotE2);
+        if(!markersAdded) ParkingTag.add(LotE2);
 
         Marker LotF1 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062263, -117.816958))
                 .title("Parking Lot F1")
                 .snippet(""));
         LotF1.setTag("PARKING");
-        ParkingTag.add(LotF1);
+        if(!markersAdded) ParkingTag.add(LotF1);
 
         Marker LotF2 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061494, -117.817693))
                 .title("Parking Lot F2")
                 .snippet(""));
         LotF2.setTag("PARKING");
-        ParkingTag.add(LotF2);
+        if(!markersAdded) ParkingTag.add(LotF2);
 
         Marker LotF3 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062045, -117.816325))
                 .title("Parking Lot F3")
                 .snippet(""));
         LotF3.setTag("PARKING");
-        ParkingTag.add(LotF3);
+        if(!markersAdded) ParkingTag.add(LotF3);
 
         Marker LotF4 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061050, -117.817350))
                 .title("Parking Lot F4")
                 .snippet(""));
         LotF4.setTag("PARKING");
-        ParkingTag.add(LotF4);
+        if(!markersAdded) ParkingTag.add(LotF4);
 
         Marker LotF5 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061579, -117.815456))
                 .title("Parking Lot F5")
                 .snippet(""));
         LotF5.setTag("PARKING");
-        ParkingTag.add(LotF5);
+        if(!markersAdded) ParkingTag.add(LotF5);
 
         Marker LotF8 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.059135, -117.817087))
                 .title("Parking Lot F8")
                 .snippet(""));
         LotF8.setTag("PARKING");
-        ParkingTag.add(LotF8);
+        if(!markersAdded) ParkingTag.add(LotF8);
 
         Marker LotF9 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060099, -117.815472))
                 .title("Parking Lot F9")
                 .snippet(""));
         LotF9.setTag("PARKING");
-        ParkingTag.add(LotF9);
+        if(!markersAdded) ParkingTag.add(LotF9);
 
         Marker LotF10 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061059, -117.814522))
                 .title("Parking Lot F10")
                 .snippet(""));
         LotF10.setTag("PARKING");
-        ParkingTag.add(LotF10);
+        if(!markersAdded) ParkingTag.add(LotF10);
 
         Marker LotG = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055620, -117.819694))
                 .title("Parking Lot G")
                 .snippet(""));
         LotG.setTag("PARKING");
-        ParkingTag.add(LotG);
+        if(!markersAdded) ParkingTag.add(LotG);
 
         Marker LotH = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060928, -117.818784))
                 .title("Parking Lot H")
                 .snippet(""));
         LotH.setTag("PARKING");
-        ParkingTag.add(LotH);
+        if(!markersAdded) ParkingTag.add(LotH);
 
         Marker LotI = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.048855, -117.819519))
                 .title("Parking Lot I")
                 .snippet(""));
         LotI.setTag("PARKING");
-        ParkingTag.add(LotI);
+        if(!markersAdded) ParkingTag.add(LotI);
 
         Marker LotJ = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057808, -117.828936))
                 .title("Parking Lot J")
                 .snippet(""));
         LotJ.setTag("PARKING");
-        ParkingTag.add(LotJ);
+        if(!markersAdded) ParkingTag.add(LotJ);
 
         Marker LotL = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055510, -117.825479))
                 .title("Parking Lot L")
                 .snippet(""));
         LotL.setTag("PARKING");
-        ParkingTag.add(LotL);
+        if(!markersAdded) ParkingTag.add(LotL);
 
         Marker LotM = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055452, -117.829687))
                 .title("Parking Lot M")
                 .snippet(""));
         LotM.setTag("PARKING");
-        ParkingTag.add(LotM);
+        if(!markersAdded) ParkingTag.add(LotM);
 
         Marker LotN = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056200, -117.818885))
                 .title("Parking Lot N")
                 .snippet(""));
         LotN.setTag("PARKING");
-        ParkingTag.add(LotN);
+        if(!markersAdded) ParkingTag.add(LotN);
 
         Marker LotO = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.050022, -117.814439))
                 .title("Parking Lot O")
                 .snippet(""));
         LotO.setTag("PARKING");
-        ParkingTag.add(LotO);
+        if(!markersAdded) ParkingTag.add(LotO);
 
         Marker LotP = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054486, -117.815519))
                 .title("Parking Lot P")
                 .snippet(""));
         LotP.setTag("PARKING");
-        ParkingTag.add(LotP);
+        if(!markersAdded) ParkingTag.add(LotP);
 
         Marker LotQ = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054939, -117.817))
                 .title("Parking Lot Q")
                 .snippet(""));
         LotQ.setTag("PARKING");
-        ParkingTag.add(LotQ);
+        if(!markersAdded) ParkingTag.add(LotQ);
 
         Marker LotR = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.063572, -117.825608))
                 .title("Parking Lot R")
                 .snippet(""));
         LotR.setTag("PARKING");
-        ParkingTag.add(LotR);
+        if(!markersAdded) ParkingTag.add(LotR);
 
         Marker LotU = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.048754, -117.817544))
                 .title("Parking Lot U")
                 .snippet(""));
         LotU.setTag("PARKING");
-        ParkingTag.add(LotU);
+        if(!markersAdded) ParkingTag.add(LotU);
 
         Marker LotPatient = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057453, -117.828142))
                 .title("Health Center Patient Parking")
                 .snippet(""));
         LotPatient.setTag("PARKING");
-        ParkingTag.add(LotPatient);
+        if(!markersAdded) ParkingTag.add(LotPatient);
 
         Marker LotOverflow = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.053262, -117.809458))
                 .title("Overflow Parking Lot")
                 .snippet(""));
         LotOverflow.setTag("PARKING");
-        ParkingTag.add(LotOverflow);
+        if(!markersAdded) ParkingTag.add(LotOverflow);
 
         Marker LotStructure1 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060265, -117.816936))
                 .title("Parking Structure 1")
                 .snippet(""));
         LotStructure1.setTag("PARKING");
-        ParkingTag.add(LotStructure1);
+        if(!markersAdded) ParkingTag.add(LotStructure1);
 
         Marker LotStructure2 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.051848, -117.819712))
                 .title("Parking Structure 2")
                 .snippet(""));
         LotStructure2.setTag("PARKING");
-        ParkingTag.add(LotStructure2);
+        if(!markersAdded) ParkingTag.add(LotStructure2);
     }
 
     @Override
