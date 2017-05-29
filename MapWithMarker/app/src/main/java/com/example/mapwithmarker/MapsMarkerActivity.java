@@ -343,11 +343,11 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                     .build();
         }
         if(!(intent.getStringArrayListExtra(SearchActivity.TAG_LIST) == null) &&
-            !intent.getStringArrayListExtra(SearchActivity.TAG_LIST).isEmpty())
-                 tags = intent.getStringArrayListExtra(SearchActivity.TAG_LIST);
+                !intent.getStringArrayListExtra(SearchActivity.TAG_LIST).isEmpty())
+            tags = intent.getStringArrayListExtra(SearchActivity.TAG_LIST);
 
         if(!(specificTag == null) && !specificTag.equals("") )
-                 specificTag = intent.getStringExtra(SearchActivity.SPECIFIC_SEARCH);
+            specificTag = intent.getStringExtra(SearchActivity.SPECIFIC_SEARCH);
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
@@ -361,122 +361,122 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
     private void filterOnTags()
     {
-      for(String tag : tags)
-      {
-          switch (tag)
-          {
-              case "Food":
-                  for(Marker mark : FoodTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        for(String tag : tags)
+        {
+            switch (tag)
+            {
+                case "Food":
+                    for(Marker mark : FoodTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
-                  }
-                  break;
-              case "Art":
-                  for(Marker mark : ArtTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+                    }
+                    break;
+                case "Art":
+                    for(Marker mark : ArtTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
 
-                  }
-                  break;
-              case "Athletic":
-                  for(Marker mark : AthleticTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                  }
-                  break;
-              case "Housing":
-                  for(Marker mark : HousingTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-                  }
-                  break;
-              case "Market":
-                  for(Marker mark : MarketTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
-                  }
-                  break;
-              case "Parking":
-                  for(Marker mark : ParkingTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                  }
-                  break;
-              case "Resource":
-                  for(Marker mark : ResourcesTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                  }
-                  break;
-              case "Scenic":
-                  for(Marker mark : ScenicTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-                  }
-                  break;
-              case "Social":
-                  for(Marker mark : SocialTag)
-                  {
-                      LatLng loc = mark.getPosition();
-                      mark.setVisible(true);
-                      googleMap.addMarker(new MarkerOptions()
-                              .position(loc)
-                              .title(mark.getTitle())
-                              .snippet(mark.getSnippet())
-                              .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                  }
-                  break;
-          }
-      }
+                    }
+                    break;
+                case "Athletic":
+                    for(Marker mark : AthleticTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    }
+                    break;
+                case "Housing":
+                    for(Marker mark : HousingTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                    }
+                    break;
+                case "Market":
+                    for(Marker mark : MarketTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+                    }
+                    break;
+                case "Parking":
+                    for(Marker mark : ParkingTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                    }
+                    break;
+                case "Resource":
+                    for(Marker mark : ResourcesTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    }
+                    break;
+                case "Scenic":
+                    for(Marker mark : ScenicTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                    }
+                    break;
+                case "Social":
+                    for(Marker mark : SocialTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                    }
+                    break;
+            }
+        }
 
     }
     private void filterOnKeyWord()
@@ -543,7 +543,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             addMarkers();
             if(!markersAdded) updateTags(); //add lists to hashmap
             markersAdded = true; //there's actions we only want to perform once when addMarkers is called and
-                                    //we only want to call updateTags() to add them to the hashmap once.
+            //we only want to call updateTags() to add them to the hashmap once.
 
             if(filtering)
             {
@@ -557,15 +557,31 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
         googleMap.setOnInfoWindowClickListener(new ClickForDirectionsListener());
         googleMap.setInfoWindowAdapter(new MarkerWindow());
-
-
-
-
     }
 
     private void addMarkers() {
 
         //// Food Areas ////////////////////////////////////////////////////////////////
+
+        Marker JambaBRICInfo = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.054304, -117.820431))
+                .title("Jamba Juice [BRIC]")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) FoodTag.add(JambaBRICInfo);
+
+        LatLng Einstein = new LatLng(34.061524,	-117.820143);
+        Marker EinsteinInfo = googleMap.addMarker(new MarkerOptions()
+                .position(Einstein)
+                .title("Einstein Bros. Bagels")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) FoodTag.add(EinsteinInfo);
+
+        LatLng PonyExpress = new LatLng(34.061523, -117.820194);
+        Marker PonyExpressInfo = googleMap.addMarker(new MarkerOptions()
+                .position(PonyExpress)
+                .title("Pony Express")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) FoodTag.add(PonyExpressInfo);
 
         LatLng LosOlivos = new LatLng(34.062360, -117.821519);
         Marker LosOlivosInfo = googleMap.addMarker(new MarkerOptions()
@@ -663,6 +679,21 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         if(!markersAdded) FoodTag.add(FarmStoreInfo);
 
         //// Visual POIs //////////////////////////////////////////////////////
+
+        LatLng LyleCenter = new LatLng(34.049494, -117.824197);
+        Marker LyleCenterInfo = googleMap.addMarker(new MarkerOptions()
+                .position(LyleCenter)
+                .title("John T. Lyle Center for Regenerative Studies")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) ScenicTag.add(LyleCenterInfo);
+        if(!markersAdded) BuildingTag.add(LyleCenterInfo);
+
+        LatLng Statue = new LatLng(34.054933, -117.819287);
+        Marker StatueInfo = googleMap.addMarker(new MarkerOptions()
+                .position(Statue)
+                .title("Bronco Statue")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) ScenicTag.add(LyleCenterInfo);
 
         LatLng JapaneseGarden = new LatLng(34.05992, -117.820431);
         Marker JapaneseGardenInfo = googleMap.addMarker(new MarkerOptions()
@@ -773,10 +804,10 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         BioTrekGardenInfo.setTag("SCENIC");
         if(!markersAdded) ScenicTag.add(BioTrekGardenInfo);
 
-        LatLng BioTrekCenter = new LatLng(34.058232, -117.826072);
+        LatLng BioTrekCenter = new LatLng(34.057196, -117.826047);
         Marker BioTrekCenterInfo = googleMap.addMarker(new MarkerOptions()
                 .position(BioTrekCenter)
-                .title("BioTrek Learning Center")
+                .title("Building 4A: BioTrek Learning Center")
                 .snippet("BioTrek is an educational enterprise of the Biological Sciences Department of California State Polytechnic University, Pomona. In its greenhouse, garden, and labs, it brings to students and the public both hands-on and electronic educational experiences of the tropical rainforest and California indigenous plants and people. "));
         BioTrekGardenInfo.setTag("SCENIC");
         if(!markersAdded) ScenicTag.add(BioTrekCenterInfo);
@@ -895,11 +926,188 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker Bldg26A = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056717, -117.820551))
                 .title("Bldg 26A: Student Orientation Center")
-                .snippet("No further info available"));
+                .snippet("SNIPPET NEEDED"));
         Bldg26A.setTag("BUILDING 26A");
         if(!markersAdded) BuildingTag.add(Bldg26A);
 
+        Marker Bldg29 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.058720, -117.814810))
+                .title("Bldg 29: W.K. Kellogg Arabian Horse Center")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg29);
+
+        Marker Bldg41 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.054142, -117.821287))
+                .title("Bldg 41: Darlene May Gymnasium")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg41);
+        if(!markersAdded) AthleticTag.add(Bldg41);
+        if(!markersAdded) SocialTag.add(Bldg41);
+
+        Marker Bldg86 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.053493, -117.819842))
+                .title("Bldg 86: English Language Institute")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg86);
+
+        Marker Bldg77 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.056144, -117.825938))
+                .title("Bldg 77: Kellogg West Main Lodge")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg77);
+        if(!markersAdded) SocialTag.add(Bldg77);
+
+        Marker Bldg79 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.055248, -117.824685))
+                .title("Bldg 79: Collins College of Hospitality Management")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg79);
+
+        Marker Bldg76 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.056592, -117.824977))
+                .title("Bldg 76: Kellogg West Education/Dining")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg76);
+
+        Marker Bldg78 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.056716, -117.825701))
+                .title("Bldg 78: Kellogg West Addition")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg78);
+
+        Marker Bldg80 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.054832, -117.825390))
+                .title("Bldg 80: Collins College of Hospitality Management, Marriot Learning Center")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg80);
+
+        Marker Bldg28 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.059993, -117.810842))
+                .title("Bldg 28: Fruit/Crops Unit")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg28);
+
+        Marker Bldg32 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.055556, -117.827595))
+                .title("Bldg 32: Beef Unit/Feed Shed")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg32);
+
+        Marker Bldg68 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.054458, -117.827777))
+                .title("Bldg 68: Hay Barn")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg68);
+
+        Marker Bldg30 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.055111, -117.828437))
+                .title("Bldg 30: Agricultural Unit")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg30);
+
+        Marker Bldg31 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.054676, -117.828340))
+                .title("Bldg 31: Poultry Unit/Poultry Houses")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg31);
+
+        Marker Bldg34 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.053912, -117.828099))
+                .title("Bldg 34: Meat Laboratory")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg34);
+
+        Marker Bldg33 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.053974, -117.827509))
+                .title("Bldg 33: Feedmill")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg33);
+
+        Marker Bldg38 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.052205, -117.822365))
+                .title("Bldg 38: Feedmill")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg38);
+
+        Marker Bldg37 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.052156, -117.822912))
+                .title("Bldg 37: Swine Unit/Shelters")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg37);
+
+        Marker Bldg162_164 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.061356, -117.819881))
+                .title("Bldg 162-164: College of Business Administration")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg162_164);
+
+        Marker Bldg89 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.060576, -117.812296))
+                .title("Bldg 89: Interim Design Center")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg89);
+
+        Marker Bldg45 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.061100, -117.811078))
+                .title("Bldg 45: Agricultural Engineering")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg45);
+
+        Marker Bldg55 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.061100, -117.811078))
+                .title("Bldg 55: Foundation Administration Offices")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg55);
+
+        Marker Bldg24A_E = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.056115, -117.822486))
+                .title("Bldg 24A-E: Temporary Classrooms")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg24A_E);
+
+        Marker Bldg94 = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.059166, -117.823192))
+                .title("Bldg 94: University Office Building")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) BuildingTag.add(Bldg94);
+
         //// Helpful Facilities //////////////////////////////////////////////////////
+
+        Marker FoundationInfo = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.056213, -117.819864))
+                .title("Foundation Administration Offices")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) ResourcesTag.add(FoundationInfo);
+
+        Marker ChildCenterInfo = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.056015, -117.819429))
+                .title("Child Care Center")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) ResourcesTag.add(ChildCenterInfo);
+
+        Marker CultureCenterInfo = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.057924, -117.822688))
+                .title("Cultural Centers")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) ResourcesTag.add(CultureCenterInfo);
+
+        Marker HealthCenterInfo = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.057775, -117.827962))
+                .title("Health Services")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) ResourcesTag.add(HealthCenterInfo);
+
+        Marker PoliceParkingInfo = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.060824, -117.815768))
+                .title("Police and Parking Services")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) ResourcesTag.add(PoliceParkingInfo);
+
+        Marker VillageInfo = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.048805, -117.815686))
+                .title("University Village")
+                .snippet("SNIPPET NEEDED"));
+        if(!markersAdded) HousingTag.add(VillageInfo);
 
         Marker BRICInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054657, -117.820761))
@@ -933,7 +1141,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
         Marker BookstoreInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055987, -117.820445))
-                .title("Bronco Bookstore")
+                .title("Building 66: Bronco Bookstore")
                 .snippet("On campus retailer that offers textbooks, school supplies, convenience items, clothing, and even technology. Hours vary throughout the year."));
         BookstoreInfo.setTag("RESOURCES MARKET");
         if(!markersAdded) ResourcesTag.add(BookstoreInfo);
@@ -960,7 +1168,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
         Marker LibraryInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057891, -117.82133))
-                .title("CPP University Library")
+                .title("Building 15: CPP University Library")
                 .snippet("The University Library, located in Building 15, is not only a place to type research papers, check out books, and study, but a place where you can grab a pick-me-up beverage or snack. Starbucks is located on the first floor of the University Library and can be accessed from inside or outside the building. Indoor and outdoor seating is available."));
         LibraryInfo.setTag("RESOURCES");
         if(!markersAdded) ResourcesTag.add(LibraryInfo);
@@ -968,10 +1176,11 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
         Marker CLAInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.059601, -117.820071))
-                .title("CLA Building")
+                .title("Building 98: CLA Building")
                 .snippet("Clearly visible from the nearby freeways, the distinctly shaped triangular building is the most recognizable structure on the Cal Poly Pomona campus and widely considered a university icon. Antoine Predock, an Albuquerque-based architect, won an international competition to design the building, and completed its construction in 1992."));
         CLAInfo.setTag("RESOURCES");
         if(!markersAdded) ResourcesTag.add(CLAInfo);
+        if(!markersAdded) BuildingTag.add(CLAInfo);
 
         Marker AlamitosInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062217, -117.818069))
@@ -1073,201 +1282,252 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         PumpkinsInfo.setTag("SCENIC SOCIAL");
         if(!markersAdded) ScenicTag.add(PumpkinsInfo);
 
+        Marker CPPLettersInfo = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(34.049552, -117.818519))
+                .title("Voorhis Ecological Preserve/CPP Letters")
+                .snippet("SNIPPET NEEDED"));
+        CPPLettersInfo.setTag("SCENIC SOCIAL");
+        if(!markersAdded) ScenicTag.add(CPPLettersInfo);
+
+
+
         //// Parking Lots ////////////////////////////////////////////
 
         Marker LotA = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060614, -117.824645))
                 .title("Parking Lot A")
-                .snippet(""));
+                .snippet("Faculty and Staff, Disabled"));
         LotA.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotA);
 
         Marker LotB = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.052753, -117.815283))
                 .title("Parking Lot B")
-                .snippet(""));
+                .snippet("Designated accessible parking for Kellogg Gym, Faculty and Staff, Student, Visitor, Resident" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotB.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotB);
 
         Marker LotE1 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061486, -117.811566))
                 .title("Parking Lot E1")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotE1.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotE1);
 
         Marker LotE2 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060748, -117.812650))
                 .title("Parking Lot E2")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotE2.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotE2);
 
         Marker LotF1 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062263, -117.816958))
                 .title("Parking Lot F1")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotF1.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotF1);
 
         Marker LotF2 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061494, -117.817693))
                 .title("Parking Lot F2")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotF2.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotF2);
 
         Marker LotF3 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062045, -117.816325))
                 .title("Parking Lot F3")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotF3.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotF3);
 
         Marker LotF4 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061050, -117.817350))
                 .title("Parking Lot F4")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled, $1/ Hour Parking" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotF4.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotF4);
 
         Marker LotF5 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061579, -117.815456))
                 .title("Parking Lot F5")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotF5.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotF5);
 
         Marker LotF8 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.059135, -117.817087))
                 .title("Parking Lot F8")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Presidential, VIP and Visitor, $1/ Hour Parking" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotF8.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotF8);
 
         Marker LotF9 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060099, -117.815472))
                 .title("Parking Lot F9")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotF9.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotF9);
 
         Marker LotF10 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061059, -117.814522))
                 .title("Parking Lot F10")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotF10.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotF10);
 
         Marker LotG = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055620, -117.819694))
                 .title("Parking Lot G")
-                .snippet(""));
+                .snippet("Faculty and Staff, Resident, Visitor, $1/ Hour Parking"));
         LotG.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotG);
 
         Marker LotH = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060928, -117.818784))
                 .title("Parking Lot H")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotH.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotH);
 
         Marker LotI = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.048855, -117.819519))
                 .title("Parking Lot I")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotI.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotI);
 
         Marker LotJ = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057808, -117.828936))
                 .title("Parking Lot J")
-                .snippet(""));
+                .snippet("Faculty and Staff (J1-J2: 7.00am - 5.30pm; J3-J8), Student (J1-J2: After 5.30pm; J3-J8), Visitor (J1-J2: After 5.30pm; J3-J8)"+
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotJ.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotJ);
 
         Marker LotL = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055510, -117.825479))
                 .title("Parking Lot L")
-                .snippet(""));
+                .snippet("Kellogg West permit Only, Disabled"));
         LotL.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotL);
 
         Marker LotM = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055452, -117.829687))
                 .title("Parking Lot M")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotM.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotM);
 
         Marker LotN = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056200, -117.818885))
                 .title("Parking Lot N")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotN.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotN);
 
         Marker LotO = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.050022, -117.814439))
                 .title("Parking Lot O")
-                .snippet(""));
+                .snippet("CTTI permit only, Disabled"));
         LotO.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotO);
 
         Marker LotP = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054486, -117.815519))
                 .title("Parking Lot P")
-                .snippet(""));
+                .snippet("Faculty and Staff, Resident"));
         LotP.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotP);
 
         Marker LotQ = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054939, -117.817))
                 .title("Parking Lot Q")
-                .snippet(""));
+                .snippet("Faculty and Staff, Resident, Disabled"));
         LotQ.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotQ);
 
         Marker LotR = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.063572, -117.825608))
                 .title("Parking Lot R")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotR.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotR);
 
         Marker LotU = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.048754, -117.817544))
                 .title("Parking Lot U")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled, $1/ Hour Parking" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotU.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotU);
 
         Marker LotPatient = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057453, -117.828142))
                 .title("Health Center Patient Parking")
-                .snippet(""));
+                .snippet("Health center patients only, 2 Hour Limit"));
         LotPatient.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotPatient);
 
         Marker LotOverflow = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.053262, -117.809458))
                 .title("Overflow Parking Lot")
-                .snippet(""));
+                .snippet("\tFaculty and Staff, Student" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotOverflow.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotOverflow);
 
         Marker LotStructure1 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060265, -117.816936))
                 .title("Parking Structure 1")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotStructure1.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotStructure1);
 
         Marker LotStructure2 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.051848, -117.819712))
                 .title("Parking Structure 2")
-                .snippet(""));
+                .snippet("Faculty and Staff, Student, Visitor, Disabled" +
+                        "\n\nBeginning Summer Quarter 2017:" +
+                        "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         LotStructure2.setTag("PARKING");
         if(!markersAdded) ParkingTag.add(LotStructure2);
     }
