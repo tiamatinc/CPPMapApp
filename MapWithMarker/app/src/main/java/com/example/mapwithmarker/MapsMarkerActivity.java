@@ -149,15 +149,24 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         PointsOfInterest.put("HOUSING", HousingTag);
         PointsOfInterest.put("ART", ArtTag);
 
-        printHashMap(PointsOfInterest);
+        printHashMap();
     }
 
 
-    public void printHashMap(HashMap<String, ArrayList<Marker>> printThis) {
+    public void printHashMap() {
         //FOR EACH KEY/ TAG IN THE POINTSOFINTEREST HASHMAP
         for (String key : PointsOfInterest.keySet()) {
             for (Marker POI : PointsOfInterest.get(key)) {
                 Log.d("printingkeys", "KEY: " + key + " Value: " + POI.getTitle());
+            }
+        }
+    }
+
+    public void hideInfoWindows() {
+        //FOR EACH KEY/ TAG IN THE POINTSOFINTEREST HASHMAP
+        for (String key : PointsOfInterest.keySet()) {
+            for (Marker POI : PointsOfInterest.get(key)) {
+                POI.hideInfoWindow();
             }
         }
     }
@@ -351,10 +360,11 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         //FOR EACH KEY/ TAG IN THE POINTSOFINTEREST HASHMAP
         for (String key : PointsOfInterest.keySet()) {
             for (Marker POI : PointsOfInterest.get(key)) {
+                Log.d("testingHash", "test");
                 //COMPUTE DISTANCE BETWEEN TWO POINTS (FROM AND TO) == (FROM CURRENT LOCATION TO POI)
-                Log.d("current location", mLastLocation.getLatitude() + " " + mLastLocation.getLongitude());
+                Log.d("current location33", mLastLocation.getLatitude() + " " + mLastLocation.getLongitude());
 
-                //distanceBetween = SphericalUtil.computeDistanceBetween(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), POI.getPosition());
+                distanceBetween = SphericalUtil.computeDistanceBetween(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), POI.getPosition());
                 Log.d("DISTANCE", "distanceBetween " + POI + " and you: " + distanceBetween);
                 POI.setTag(distanceBetween);
                 updateClosestPOIs(POI);
@@ -697,9 +707,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap thisMap) {
         googleMap = thisMap;
-        Log.d("order: ", "onMapReady");
-        //USE MARKER VISIBILITY
-        //EX) CLICK SHOW ALL FOOD AND ONLY FOOD MARKERS WILL APPEAR
         boolean filtering = false;
 
         // Set a preference for minimum and maximum zoom.
@@ -728,7 +735,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(CalPolyPomona.getCenter(), 1));
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocationCoord, 1));
 
 
         // Add a marker in CPP, USA,
@@ -769,6 +775,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
         Button butt = (Button) findViewById(R.id.assButt);
         butt.setOnClickListener(this);
+
         //findClosestPOI();
     }
 
@@ -779,21 +786,44 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker JambaBRICInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054304, -117.820431))
                 .title("Jamba Juice [BRIC]")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Straightforward counter-serve chain for smoothies, juices & health-focused light bites\n" +
+                "Hours:\n" +
+                "Monday -- Thursday\n" +
+                "8:00 am - 8:00 pm\n" +
+                "Friday\n" +
+                "7:00 am - 7:30 pm\t\n" +
+                "Saturday\n" +
+                "8:00 - 6:00 pm\t\n" +
+                "Sunday\n" +
+                "CLOSED\n"));
         if(!markersAdded) FoodTag.add(JambaBRICInfo);
 
         LatLng Einstein = new LatLng(34.061524,	-117.820143);
         Marker EinsteinInfo = googleMap.addMarker(new MarkerOptions()
                 .position(Einstein)
                 .title("Einstein Bros. Bagels")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Einstein Bros. Bagels is your neighborhood bagel shop. We're proud to provide our guests with freshly baked bagels, breakfast sandwiches, lunch sandwiches, salads, parfaits, smoothies, coffee, and catering. Stop on in!" +
+                        "Hours:\n" +
+                        "Monday -- Thursday\n" +
+                        "7:00 am - 7:00 pm\n" +
+                        "Friday\n" +
+                        "7:00 am - 4:0 pm\t\n" +
+                        "Saturday -- Sunday\n" +
+                        "CLOSED\n"));
         if(!markersAdded) FoodTag.add(EinsteinInfo);
 
         LatLng PonyExpress = new LatLng(34.061523, -117.820194);
         Marker PonyExpressInfo = googleMap.addMarker(new MarkerOptions()
                 .position(PonyExpress)
                 .title("Pony Express")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Pony Express is a convenience store with a wide variety of grab-n-go items, including sandwiches, sushi, beverages, and other snacks. School supplies, health and beauty aids, and various other personal items are also sold at Pony Express." +
+                        "Hours:\n" +
+                        "Monday -- Thursday\n" +
+                        "7:30 am - 8:00 pm\n" +
+                        "Friday\n" +
+                        "7:30 am - 3:00 pm\n" +
+                        "Saturday -- Sunday\n" +
+                        "CLOSED\n" ));
         if(!markersAdded) FoodTag.add(PonyExpressInfo);
 
         LatLng LosOlivos = new LatLng(34.062360, -117.821519);
@@ -807,7 +837,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "Friday\n" +
                         "7:00 am - 7:30 pm\t\n" +
                         "Saturday\n" +
-                        "1:30 - 7:30 pm\t\n" +
+                        "1:30 - 7:30 pm\n" +
                         "Sunday\n" +
                         "1:30 - 7:30 pm\n" +
                         "Late night options available Mon- Wed, Sun: 9 pm - Midnight;\n"));
@@ -889,19 +919,19 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker KelloggHouseInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062544, -117.824431))
                 .title("Kellogg House Pomona")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Nestled among the lush landscape and blanketed by the walnut trees, Kellogg House is the perfect venue for weddings, corporate meetings, birthday parties, and other special events. Constructed in 1926, this spacious ranch-style estate exudes historical charm, offers mesmerizing views, and can easily accommodate groups of up to 200. Schedule a tour and experience the grandeur of Kellogg House!"));
         if(!markersAdded) ScenicTag.add(KelloggHouseInfo);
 
         Marker GuestInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.062428, -117.824742))
                 .title("Guest House")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Nestled among the lush landscape and blanketed by the walnut trees, Kellogg House is the perfect venue for weddings, corporate meetings, birthday parties, and other special events. Constructed in 1926, this spacious ranch-style estate exudes historical charm, offers mesmerizing views, and can easily accommodate groups of up to 200. Schedule a tour and experience the grandeur of Kellogg House!"));
         if(!markersAdded) ScenicTag.add(GuestInfo);
 
         Marker ManorInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060517, -117.823020))
                 .title("Kellogg Manor")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Nestled among the lush landscape and blanketed by the walnut trees, Kellogg House is the perfect venue for weddings, corporate meetings, birthday parties, and other special events. Constructed in 1926, this spacious ranch-style estate exudes historical charm, offers mesmerizing views, and can easily accommodate groups of up to 200. Schedule a tour and experience the grandeur of Kellogg House!"));
         if(!markersAdded) ScenicTag.add(ManorInfo);
 
 
@@ -909,7 +939,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker LyleCenterInfo = googleMap.addMarker(new MarkerOptions()
                 .position(LyleCenter)
                 .title("John T. Lyle Center for Regenerative Studies")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("The Center is administered by the College of Environmental Design, and offers a Master of Science in regenerative studies as well as a minor program at the undergraduate level. Faculty are drawn from departments across campus, creating a unique interdisciplinary learning environment."));
         if(!markersAdded) ScenicTag.add(LyleCenterInfo);
         if(!markersAdded) BuildingTag.add(LyleCenterInfo);
 
@@ -917,7 +947,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker StatueInfo = googleMap.addMarker(new MarkerOptions()
                 .position(Statue)
                 .title("Bronco Statue")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("One of Cal Poly's legendary horses, immortalized as a statue."));
         if(!markersAdded) ScenicTag.add(StatueInfo);
         if(!markersAdded) ArtTag.add(StatueInfo);
 
@@ -1125,19 +1155,19 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker Bldg26A = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056717, -117.820551))
                 .title("Building 26A: Student Orientation Center")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Orientation Services- Visit the main office in the CLA for more info."));
         if(!markersAdded) BuildingTag.add(Bldg26A);
 
         Marker Bldg29 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.058720, -117.814810))
                 .title("Building 29: W.K. Kellogg Arabian Horse Center")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("The W.K. Kellogg Arabian Horse Center, located in the heart of the Cal Poly Pomona campus, is a showcase facility that houses approximately 100 purebred Arabian horses.  Typically, 10-15 foals are born each year. The breeding program is dedicated to producing beautiful athletes, which are offered for sale in the Annual Production Sale in August of each year. The W.K. Kellogg Arabian Horse Center is proud to have produced numerous national winners in a wide range of disciplines. The Arabian Horse Center is generally open for self-guided tours from 8-4 seven days"));
         if(!markersAdded) BuildingTag.add(Bldg29);
 
         Marker Bldg41 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054142, -117.821287))
                 .title("Bldg 41: Darlene May Gymnasium")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("The Darlene May Gymnasium is named in honor Darlene May who was the winningest coach in NCAA Division II Basketball history, it opened in 1996 and seats 500."));
         if(!markersAdded) BuildingTag.add(Bldg41);
         if(!markersAdded) AthleticTag.add(Bldg41);
         if(!markersAdded) SocialTag.add(Bldg41);
@@ -1145,128 +1175,123 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker Bldg86 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.053493, -117.819842))
                 .title("Bldg 86: English Language Institute")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("The Cal Poly English Language Institute (CPELI) links theory and practice to provide exemplary instruction which advances the academic, professional and personal goals of English language learners."));
         if(!markersAdded) BuildingTag.add(Bldg86);
 
         Marker Bldg77 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056144, -117.825938))
                 .title("Bldg 77: Kellogg West Main Lodge")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Uniquely located on a wooded hilltop overlooking cereal magnate W.K. Kellogg’s former ranch estate, Kellogg West Conference Center & Hotel @ Cal Poly Pomona offers the perfect backdrop for meetings, conferences and special events. "));
         if(!markersAdded) BuildingTag.add(Bldg77);
         if(!markersAdded) SocialTag.add(Bldg77);
 
         Marker Bldg79 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055248, -117.824685))
                 .title("Bldg 79: Collins College of Hospitality Management")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Founded in 1973, The Collins College of Hospitality Management at Cal Poly Pomona thrives from a tradition of excellence and is consistently ranked among the premier hospitality colleges in the world. It is dedicated to advancing the field of hospitality management through its collaborative learn-by-doing approach to education, its profound appreciation of the diversity of backgrounds, ideas and cultures, and its active engagement in strategically integrating scholarship, service and applied learning."));
         if(!markersAdded) BuildingTag.add(Bldg79);
 
         Marker Bldg76 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056592, -117.824977))
                 .title("Bldg 76: Kellogg West Education/Dining")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Founded in 1973, The Collins College of Hospitality Management at Cal Poly Pomona thrives from a tradition of excellence and is consistently ranked among the premier hospitality colleges in the world. It is dedicated to advancing the field of hospitality management through its collaborative learn-by-doing approach to education, its profound appreciation of the diversity of backgrounds, ideas and cultures, and its active engagement in strategically integrating scholarship, service and applied learning."));
         if(!markersAdded) BuildingTag.add(Bldg76);
 
         Marker Bldg78 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056716, -117.825701))
                 .title("Bldg 78: Kellogg West Addition")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Founded in 1973, The Collins College of Hospitality Management at Cal Poly Pomona thrives from a tradition of excellence and is consistently ranked among the premier hospitality colleges in the world. It is dedicated to advancing the field of hospitality management through its collaborative learn-by-doing approach to education, its profound appreciation of the diversity of backgrounds, ideas and cultures, and its active engagement in strategically integrating scholarship, service and applied learning."));
         if(!markersAdded) BuildingTag.add(Bldg78);
 
         Marker Bldg80 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054832, -117.825390))
                 .title("Bldg 80: Collins College of Hospitality Management, Marriot Learning Center")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Founded in 1973, The Collins College of Hospitality Management at Cal Poly Pomona thrives from a tradition of excellence and is consistently ranked among the premier hospitality colleges in the world. It is dedicated to advancing the field of hospitality management through its collaborative learn-by-doing approach to education, its profound appreciation of the diversity of backgrounds, ideas and cultures, and its active engagement in strategically integrating scholarship, service and applied learning."));
         if(!markersAdded) BuildingTag.add(Bldg80);
 
         Marker Bldg28 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.059993, -117.810842))
                 .title("Bldg 28: Fruit/Crops Unit")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Storage"));
         if(!markersAdded) BuildingTag.add(Bldg28);
 
         Marker Bldg32 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055556, -117.827595))
                 .title("Bldg 32: Beef Unit/Feed Shed")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Storage"));
         if(!markersAdded) BuildingTag.add(Bldg32);
 
         Marker Bldg68 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054458, -117.827777))
                 .title("Bldg 68: Hay Barn")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Storage"));
         if(!markersAdded) BuildingTag.add(Bldg68);
 
         Marker Bldg30 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.055111, -117.828437))
                 .title("Bldg 30: Agricultural Unit")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Storage"));
         if(!markersAdded) BuildingTag.add(Bldg30);
 
         Marker Bldg31 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054676, -117.828340))
                 .title("Bldg 31: Poultry Unit/Poultry Houses")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Flock on over to the poultry unit... unless you're too chicken!\nSorry... that was fowl."));
         if(!markersAdded) BuildingTag.add(Bldg31);
 
         Marker Bldg34 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.053912, -117.828099))
                 .title("Bldg 34: Meat Laboratory")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Moo-ve on down to the meat lab!"));
         if(!markersAdded) BuildingTag.add(Bldg34);
 
         Marker Bldg33 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.053974, -117.827509))
                 .title("Bldg 33: Feedmill")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Yup."));
         if(!markersAdded) BuildingTag.add(Bldg33);
 
         Marker Bldg38 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.052205, -117.822365))
-                .title("Bldg 38: Feedmill")
-                .snippet("SNIPPET NEEDED"));
+                .title("Bldg 38: Sheep/ Wool Unit")
+                .snippet("There's also an alpaca. He guards the sheep. (Fun fact: Alpacas are organic coyote repellent.)"));
         if(!markersAdded) BuildingTag.add(Bldg38);
 
         Marker Bldg37 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.052156, -117.822912))
                 .title("Bldg 37: Swine Unit/Shelters")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Our pigs are just BACON for your company! "));
         if(!markersAdded) BuildingTag.add(Bldg37);
 
         Marker Bldg162_164 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061356, -117.819881))
                 .title("Bldg 162-164: College of Business Administration")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("The College of Business Administration at Cal Poly Pomona is an AACSB-International accredited institution committed to providing students with the knowledge, skills and experiences to become global leaders."));
         if(!markersAdded) BuildingTag.add(Bldg162_164);
 
         Marker Bldg89 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060576, -117.812296))
                 .title("Bldg 89: Interim Design Center")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("The College of Environmental Design offers undergraduate and graduate degrees in Architecture, Landscape Architecture, and Urban and Regional Planning; undergraduate degrees in Art History and Graphic Design; and a graduate degree in Regenerative Studies."));
         if(!markersAdded) BuildingTag.add(Bldg89);
 
         Marker Bldg45 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.061100, -117.811078))
                 .title("Bldg 45: Agricultural Engineering")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("California is the nation's #1 agriculture state. Learn about all aspects of \"the new agriculture\" so that you can become an educator (over 1/3 of California high schools have Ag Ed programs) or a manager in this huge industry. From farm and garden \"labs\" to community involvement and public speaking, you'll get hands-on experience and real-life skills."));
         if(!markersAdded) BuildingTag.add(Bldg45);
 
-        Marker Bldg55 = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(34.061100, -117.811078))
-                .title("Bldg 55: Foundation Administration Offices")
-                .snippet("SNIPPET NEEDED"));
-        if(!markersAdded) BuildingTag.add(Bldg55);
 
         Marker Bldg24A_E = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056115, -117.822486))
                 .title("Bldg 24A-E: Temporary Classrooms")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Temporary classroms"));
         if(!markersAdded) BuildingTag.add(Bldg24A_E);
 
         Marker Bldg94 = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.059166, -117.823192))
                 .title("Bldg 94: University Office Building")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Building"));
         if(!markersAdded) BuildingTag.add(Bldg94);
 
         //// Helpful Facilities //////////////////////////////////////////////////////
@@ -1274,37 +1299,60 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker FoundationInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056213, -117.819864))
                 .title("Foundation Administration Offices")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Administrative affairs provides fiscal, human and facility services in support of the university community."));
         if(!markersAdded) ResourcesTag.add(FoundationInfo);
 
         Marker ChildCenterInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056015, -117.819429))
                 .title("Child Care Center")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("The Cal Poly Children's Center provide a safe and nurturing environment where student-parents can leave their children with confidence while they fulfill their educational goals and working parents can have peace of mind concerning their children’s wellbeing." +
+                        "Hours:\n" +
+                        "Monday -- Thursday\n" +
+                        "8:00 am - 8:00 pm\n" +
+                        "Friday\n" +
+                        "7:00 am - 7:30 pm\\n" +
+                        "Saturday\n" +
+                        "8:00 - 6:00 pm\n" +
+                        "Sunday\n" +
+                        "CLOSED\n"));
         if(!markersAdded) ResourcesTag.add(ChildCenterInfo);
 
         Marker CultureCenterInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057924, -117.822688))
                 .title("Cultural Centers")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("African American Student Center\n" +
+                        "Asian & Pacific Islander Center\n" +
+                        "César E. Chávez Center for Higher Education\n" +
+                        "Native American Student Center\n" +
+                        "Pride Center\n" +
+                        "Violence Prevention & Women's Resource Center"));
         if(!markersAdded) ResourcesTag.add(CultureCenterInfo);
 
         Marker HealthCenterInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.057775, -117.827962))
                 .title("Health Services")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Health Services offers visits with medical providers by appointment or through Urgent Care for non-life threatening sudden accidents or injuries." +
+                        "Hours:\n" +
+                        "Monday -- Friday\n" +
+                        "8:00 am - 5:00 pm\n" +
+                        "Saturday -- Sunday\n" +
+                        "CLOSED\n"));
         if(!markersAdded) ResourcesTag.add(HealthCenterInfo);
 
         Marker PoliceParkingInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060824, -117.815768))
                 .title("Police and Parking Services")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Hours:\n" +
+                        "Monday -- Friday\n" +
+                        "8:00 am - 5:00 pm\n" +
+                        "Saturday -- Sunday\n" +
+                        "CLOSED\n"));
         if(!markersAdded) ResourcesTag.add(PoliceParkingInfo);
 
         Marker VillageInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.048805, -117.815686))
                 .title("University Village")
-                .snippet("SNIPPET NEEDED"));
+                .snippet("Student Housing"));
         if(!markersAdded) HousingTag.add(VillageInfo);
 
         Marker BRICInfo = googleMap.addMarker(new MarkerOptions()
@@ -1463,8 +1511,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
         Marker CPPLettersInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060593, -117.826878))
-                .title("Voorhis Ecological Preserve/CPP Letters")
-                .snippet("SNIPPET NEEDED"));
+                .title("Voorhis Ecological Reserve/CPP Letters")
+                .snippet("The Voorhis Ecological Reserve in the northwest part of campus contains 31 ha of coastal sage scrub and oak woodland. It was established informally in the 1970s, and formally dedicated on June 29, 1983. It is named for Jerry Voorhis, a former congressman with a long connection to Cal Poly Pomona."));
         if(!markersAdded) ScenicTag.add(CPPLettersInfo);
 
 
@@ -1680,6 +1728,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "\n\nBeginning Summer Quarter 2017:" +
                         "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         if(!markersAdded) ParkingTag.add(LotStructure2);
+
+        hideInfoWindows();
     }
 
     @Override
@@ -1957,6 +2007,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
+
         // Set Destination
         final String ssid = dest.getTitle();
 

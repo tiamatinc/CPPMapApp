@@ -34,7 +34,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/bottomsheet_snippet"
