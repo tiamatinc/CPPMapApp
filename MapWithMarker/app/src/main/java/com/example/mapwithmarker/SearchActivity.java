@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -110,7 +111,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         //assign listeners
         btnSearch.setOnClickListener(btnListener);
         txSpecific.setOnClickListener(txListener);
-
+        txSpecific.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        txSpecific.setSingleLine(true);
     }
     public void onMapReady(GoogleMap thisMap) {
         map = thisMap;

@@ -10,12 +10,15 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +42,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-//import com.google.maps.android.SphericalUtil;
+import com.google.maps.android.SphericalUtil;
+
+import android.support.design.widget.BottomSheetDialogFragment;
+import static android.R.attr.x;
 
 import org.json.JSONObject;
 
@@ -60,7 +66,10 @@ import java.util.List;
 public class MapsMarkerActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        View.OnClickListener,
+        GoogleMap.OnMapClickListener,
+        GoogleMap.OnMarkerClickListener {
 
     //ARRAYLIST TO STORE THE POINTS OF INTEREST FOR EACH TAG
     ArrayList<Marker> FoodTag = new ArrayList<>();
@@ -74,8 +83,12 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     ArrayList<Marker> HousingTag = new ArrayList<>();
     ArrayList<Marker> ArtTag = new ArrayList<>();
 
+    private View bottomSheet;
+    private BottomSheetBehavior behavior;
+
     //ARRAYLIST TO STORE THE X CLOSEST POINTS OF INTEREST TO CURRENT LOCATION
     ArrayList<Marker> closestPOIs = null;
+
     //CREATE A GOOGLE MAP
     GoogleMap googleMap = null;
     List<String> tags = new ArrayList<String>();
@@ -330,64 +343,66 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     }
 
 
-//    public void getDistances()
-//    {
-//        Log.d("GETTING DISTANCES", "GETTING DISTANCES");
-//        double distanceBetween = 0.0;
-//
-//        //FOR EACH KEY/ TAG IN THE POINTSOFINTEREST HASHMAP
-//        for (String key : PointsOfInterest.keySet()) {
-//            for (Marker POI : PointsOfInterest.get(key)) {
-//                //COMPUTE DISTANCE BETWEEN TWO POINTS (FROM AND TO) == (FROM CURRENT LOCATION TO POI)
-//                distanceBetween = SphericalUtil.computeDistanceBetween(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), POI.getPosition());
-//                Log.d("DISTANCE", "distanceBetween " + POI + " and you: " + distanceBetween);
-//                POI.setTag(distanceBetween);
-//                updateClosestPOIs(POI);
-//            }
-//        }
-//    }
-//
-//    public void updateClosestPOIs(Marker incomingPOI)
-//    {
-//        //MAX POIS TO STORE
-//        int maxPOIs = 5;
-//        //IF THE ARRAY LIST IS EMPTY OR HAS LESS THAN 5 POIS
-//        if(closestPOIs.isEmpty())
-//        {
-//            closestPOIs.add(incomingPOI);
-//        }
-//
-//        //IF THE ARRAY LIST ISN'T EMPTY
-//
-//        //FOR EVERY POI IN THE FIVECLOSESTPOI ARRAYLIST
-//        int counter = 0;
-//        for(Marker savedPOI : closestPOIs)
-//        {
-//            //IF INCOMING POI HAS IS CLOSER OR EQUAL DISTANCE THAN INDEXED POI
-//            if((double)incomingPOI.getTag() <= (double)savedPOI.getTag())
-//            {
-//                //NEW CLOSEST POI. ADDS TO THE FRONT OF THE ARRAYLIST
-//                //SHIFTS THE REMAINING ELEMENTS TO THE RIGHT
-//                closestPOIs.add(counter, incomingPOI);
-//
-//                //IF ARRAYLIST SIZE IS GREATER THAN 5
-//                if(closestPOIs.size() > maxPOIs)
-//                {
-//                    //REMOVE THE LAST POI
-//                    closestPOIs.remove(maxPOIs - 1);
-//                }
-//                counter++;
-//            }
-//        }
-//    }
-//
-//    public Marker findClosestPOI()
-//    {
-//        //GETS THE X CLOSEST POIs TO CURRENT LOCATION
-//        getDistances();
-//        Log.d("closest to you is", closestPOIs.get(0).getTitle());
-//        return closestPOIs.get(0);
-//    }
+    public void getDistances()
+    {
+        Log.d("GETTING DISTANCES", "GETTING DISTANCES");
+        double distanceBetween = 0.0;
+
+        //FOR EACH KEY/ TAG IN THE POINTSOFINTEREST HASHMAP
+        for (String key : PointsOfInterest.keySet()) {
+            for (Marker POI : PointsOfInterest.get(key)) {
+                //COMPUTE DISTANCE BETWEEN TWO POINTS (FROM AND TO) == (FROM CURRENT LOCATION TO POI)
+                Log.d("current location", mLastLocation.getLatitude() + " " + mLastLocation.getLongitude());
+
+                //distanceBetween = SphericalUtil.computeDistanceBetween(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), POI.getPosition());
+                Log.d("DISTANCE", "distanceBetween " + POI + " and you: " + distanceBetween);
+                POI.setTag(distanceBetween);
+                updateClosestPOIs(POI);
+            }
+        }
+    }
+
+    public void updateClosestPOIs(Marker incomingPOI)
+    {
+        //MAX POIS TO STORE
+        int maxPOIs = 5;
+        //IF THE ARRAY LIST IS EMPTY OR HAS LESS THAN 5 POIS
+        if(closestPOIs.isEmpty())
+        {
+            closestPOIs.add(incomingPOI);
+        }
+
+        //IF THE ARRAY LIST ISN'T EMPTY
+
+        //FOR EVERY POI IN THE FIVECLOSESTPOI ARRAYLIST
+        int counter = 0;
+        for(Marker savedPOI : closestPOIs)
+        {
+            //IF INCOMING POI HAS IS CLOSER OR EQUAL DISTANCE THAN INDEXED POI
+            if((double)incomingPOI.getTag() <= (double)savedPOI.getTag())
+            {
+                //NEW CLOSEST POI. ADDS TO THE FRONT OF THE ARRAYLIST
+                //SHIFTS THE REMAINING ELEMENTS TO THE RIGHT
+                closestPOIs.add(counter, incomingPOI);
+
+                //IF ARRAYLIST SIZE IS GREATER THAN 5
+                if(closestPOIs.size() > maxPOIs)
+                {
+                    //REMOVE THE LAST POI
+                    closestPOIs.remove(maxPOIs - 1);
+                }
+                counter++;
+            }
+        }
+    }
+
+    public Marker findClosestPOI()
+    {
+        //GETS THE X CLOSEST POIs TO CURRENT LOCATION
+        getDistances();
+        Log.d("closest to you is", closestPOIs.get(0).getTitle());
+        return closestPOIs.get(0);
+    }
 
 
     @Override
@@ -540,10 +555,11 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     }
     private void filterOnKeyWord()
     {
-
+        specificTag = specificTag.toUpperCase();
         for(Marker mark : FoodTag){
-
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -555,7 +571,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
         for(Marker mark : ArtTag){
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -567,7 +585,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
         for(Marker mark : AthleticTag){
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -579,7 +599,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
         for(Marker mark : HousingTag){
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -591,7 +613,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
         for(Marker mark : MarketTag){
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -603,7 +627,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
         for(Marker mark : ParkingTag){
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -615,7 +641,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
         for(Marker mark : ResourcesTag){
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -627,7 +655,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
         for(Marker mark : ScenicTag){
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -639,7 +669,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
         for(Marker mark : SocialTag){
-            if(mark.getTitle().contains(specificTag) || mark.getSnippet().contains(specificTag))
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
             {
                 LatLng loc = mark.getPosition();
                 mark.setVisible(true);
@@ -724,10 +756,20 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             }
         }
 
-        googleMap.setOnInfoWindowClickListener(new ClickForDirectionsListener());
-        googleMap.setInfoWindowAdapter(new MarkerWindow());
 
-        //getDistances();
+
+        //googleMap.setOnInfoWindowClickListener(new ClickForDirectionsListener());
+        //googleMap.setInfoWindowAdapter(new MarkerWindow());
+
+        bottomSheet = findViewById(R.id.design_bottom_sheet);
+        behavior = BottomSheetBehavior.from(bottomSheet);
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMapClickListener(this);
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        Button butt = (Button) findViewById(R.id.assButt);
+        butt.setOnClickListener(this);
+        //findClosestPOI();
     }
 
     private void addMarkers() {
@@ -1289,7 +1331,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker IPolyInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.051013, -117.819499))
                 .title("iPoly High School Campus")
-                .snippet("nternational Polytechnic High School (iPoly) is a specialized project-based school. It provides students with a comprehensive high school (9-12) curriculum, as well as with a technological, cultural, and global foundation. As citizens of the world, graduates of iPoly are prepared to apply their global knowledge and experience toward assuming leadership roles in the community, nation, and world"));
+                .snippet("International Polytechnic High School (iPoly) is a specialized project-based school. It provides students with a comprehensive high school (9-12) curriculum, as well as with a technological, cultural, and global foundation. As citizens of the world, graduates of iPoly are prepared to apply their global knowledge and experience toward assuming leadership roles in the community, nation, and world"));
         if(!markersAdded) ResourcesTag.add(IPolyInfo);
 
         Marker BookstoreInfo = googleMap.addMarker(new MarkerOptions()
@@ -1314,7 +1356,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker TheatreInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.056696, -117.822208))
                 .title("CPP Theatre")
-                .snippet("lays and musicals put on by students throughout the year! Tickets are usually $10 with a student ID and $15 for general admission. Check in with the theatre website to see what is currently playing and available showtimes."));
+                .snippet("Plays and musicals put on by students throughout the year! Tickets are usually $10 with a student ID and $15 for general admission. Check in with the theatre website to see what is currently playing and available showtimes."));
         if(!markersAdded) ArtTag.add(TheatreInfo);
         if(!markersAdded) ScenicTag.add(TheatreInfo);
 
@@ -1894,5 +1936,50 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 Log.d("onPostExecute","without Polylines drawn");
             }
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        dest = marker;
+        TextView title= (TextView) findViewById(R.id.bottomsheet_title);
+        title.setText(marker.getTitle());
+        TextView snippet= (TextView) findViewById(R.id.bottomsheet_snippet);
+        snippet.setText(marker.getSnippet());
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        return false;
+    }
+
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    @Override
+    public void onClick(View v) {
+        // Set Destination
+        final String ssid = dest.getTitle();
+
+        // Toast.makeText(getBaseContext(), "Destination set to " + ssid, Toast.LENGTH_SHORT).show();
+
+        // Clear Map
+        googleMap.clear();
+
+        // Set Marker
+        LatLng endPoint = dest.getPosition();
+        Marker destination = googleMap.addMarker(new MarkerOptions()
+                .position(endPoint)
+                .title(ssid)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+
+        // Calculate Route
+        LatLng user = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        String url = getUrl(user, endPoint);
+        Log.d("onMapClick", url.toString());
+        FetchUrl fetchUrl = new FetchUrl();
+
+        fetchUrl.execute(url);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(user));
+        directionsActive = true;
     }
 }
