@@ -10,14 +10,14 @@
 
     <fragment
         android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="374dp"
         android:layout_height="162dp"
-        tools:layout_editor_absoluteY="341dp"
-        tools:layout_editor_absoluteX="6dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        tools:layout_editor_absoluteX="6dp"
+        tools:layout_editor_absoluteY="341dp" />
 
     <TextView
         android:id="@+id/textView"

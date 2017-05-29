@@ -3,6 +3,7 @@
     package="com.example.mapwithmarker">
     //PERMISSION USED FOR FINE LOCATION
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-library android:name="com.Google.android.maps" />
 
     <application
         android:allowBackup="true"

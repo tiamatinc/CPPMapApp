@@ -121,6 +121,7 @@
     <orderEntry type="library" exported="" name="firebase-iid-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-vision-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wallet-9.8.0" level="project" />
+    <orderEntry type="library" exported="" name="android-maps-utils-0.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-tagmanager-api-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-9.8.0" level="project" />
     <orderEntry type="library" exported="" name="support-core-utils-25.0.1" level="project" />
