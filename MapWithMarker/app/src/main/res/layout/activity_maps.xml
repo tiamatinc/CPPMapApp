@@ -42,7 +42,9 @@
             android:id="@+id/bottomsheet_snippet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="#FFFFFF"/>
+            android:gravity="center"
+            android:padding="@dimen/place_autocomplete_prediction_secondary_text"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/assButt"

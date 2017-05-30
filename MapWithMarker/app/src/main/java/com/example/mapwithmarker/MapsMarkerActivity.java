@@ -45,7 +45,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
 
 import android.support.design.widget.BottomSheetDialogFragment;
+
+import static android.R.attr.max;
+import static android.R.attr.measureWithLargestChild;
 import static android.R.attr.x;
+import static com.example.mapwithmarker.SearchActivity.NEAR_YOU;
 
 import org.json.JSONObject;
 
@@ -87,7 +91,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     private BottomSheetBehavior behavior;
 
     //ARRAYLIST TO STORE THE X CLOSEST POINTS OF INTEREST TO CURRENT LOCATION
-    ArrayList<Marker> closestPOIs = null;
+    ArrayList<Marker> closestPOIs = new ArrayList<>();
 
     //CREATE A GOOGLE MAP
     GoogleMap googleMap = null;
@@ -97,7 +101,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     GoogleApiClient mGoogleApiClient = null;
 
     //CREATE TOOLS FOR LOCATION MANAGER
-    //private LocationManager locationManager = null;
     private LocationListener locationListener = null;
 
     //CURRENT LOCATION
@@ -134,7 +137,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     private boolean directionsActive = false;
 
     //COLOR FOR INFO WINDOW
-    private final int CPP_GREEN= Color.rgb(32, 74, 0);
+    private final int CPP_GREEN = Color.rgb(32, 74, 0);
 
     public void updateTags() {
         PointsOfInterest.put("FOOD", FoodTag);
@@ -162,22 +165,35 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         }
     }
 
-    public void hideInfoWindows() {
-        //FOR EACH KEY/ TAG IN THE POINTSOFINTEREST HASHMAP
-        for (String key : PointsOfInterest.keySet()) {
-            for (Marker POI : PointsOfInterest.get(key)) {
-                POI.hideInfoWindow();
-            }
-        }
-    }
-
+    @Override
     protected void onStart() {
-        mGoogleApiClient.connect();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.connect();
+        }
         super.onStart();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
+
+        mGoogleApiClient.connect();
+    }
+
+    @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient!=null){
+            if(mGoogleApiClient.isConnected()){
+                mGoogleApiClient.disconnect();
+            }
+        }
         super.onStop();
     }
 
@@ -208,7 +224,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
      * Get the best and most recent location of the device, which may be
      * null in rare cases when a location is not available.
      */
-        Log.d("deviceLocation", "CALLED");
+        //CALL ON CONNECTED
         if (mLocationPermissionGranted) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -225,17 +241,15 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 return;
             }
             Log.d("permissionGranted", "THANK YOU");
-//            if (mGoogleApiClient.isConnected()) {
-//                Log.d("clientConnected", "YES");
-//            }
-//            Log.d("clientConnected", "NO");
+            if (mGoogleApiClient.isConnected()) {
+                Log.d("clientConnected", "YES");
+            } else {
+                Log.d("clientConnected", "NO");
+            }
 
             mLastLocation = LocationServices.FusedLocationApi
                     .getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
-                Log.d("currentLocation", "FOUND");
-                Log.d("nav", mLastLocation.getLatitude() + ", " + mLastLocation.getLongitude());
-            }
+
         }
 
         // Set the map's camera position to the current location of the device.
@@ -278,7 +292,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         if (mGoogleApiClient.isConnected()) {
             Log.d("clientConnected", "YES");
         }
-        Log.d("clientConnected", "NO");
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
@@ -288,15 +301,19 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, locationListener);
+
+        //Log.d("theCurrent", mLastLocation.getLatitude() + " " + mLastLocation.getLongitude());
+
     }
 
     private void createLocationListener() {
+        Log.d("PLACEHOLDER", "locationcreatehere");
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                if(directionsActive) {
+                if (directionsActive) {
                     mLastLocation = location;
-                    if(directionsActive) {
+                    if (directionsActive) {
                         LatLng endPoint = dest.getPosition();
 
                         // Calculate Route
@@ -317,6 +334,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);
         mLocationRequest.setFastestInterval(500);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
@@ -352,20 +370,18 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     }
 
 
-    public void getDistances()
-    {
-        Log.d("GETTING DISTANCES", "GETTING DISTANCES");
+    public void getDistances() {
         double distanceBetween = 0.0;
+
+
 
         //FOR EACH KEY/ TAG IN THE POINTSOFINTEREST HASHMAP
         for (String key : PointsOfInterest.keySet()) {
             for (Marker POI : PointsOfInterest.get(key)) {
-                Log.d("testingHash", "test");
                 //COMPUTE DISTANCE BETWEEN TWO POINTS (FROM AND TO) == (FROM CURRENT LOCATION TO POI)
-                Log.d("current location33", mLastLocation.getLatitude() + " " + mLastLocation.getLongitude());
-
+                Log.d("currentlocation33", mLastLocation.getLatitude() + " " + mLastLocation.getLongitude());
                 distanceBetween = SphericalUtil.computeDistanceBetween(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), POI.getPosition());
-                Log.d("DISTANCE", "distanceBetween " + POI + " and you: " + distanceBetween);
+                Log.d("DISTANCEBETWEEN", "distanceBetween " + POI.getTitle() + " and you: " + distanceBetween);
                 POI.setTag(distanceBetween);
                 updateClosestPOIs(POI);
             }
@@ -376,45 +392,58 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     {
         //MAX POIS TO STORE
         int maxPOIs = 5;
-        //IF THE ARRAY LIST IS EMPTY OR HAS LESS THAN 5 POIS
-        if(closestPOIs.isEmpty())
+        //ARRAYLIST SIZE
+        int listSize = closestPOIs.size();;
+        for(int counter = 0; counter < maxPOIs; counter++)
         {
-            closestPOIs.add(incomingPOI);
-        }
-
-        //IF THE ARRAY LIST ISN'T EMPTY
-
-        //FOR EVERY POI IN THE FIVECLOSESTPOI ARRAYLIST
-        int counter = 0;
-        for(Marker savedPOI : closestPOIs)
-        {
-            //IF INCOMING POI HAS IS CLOSER OR EQUAL DISTANCE THAN INDEXED POI
-            if((double)incomingPOI.getTag() <= (double)savedPOI.getTag())
+            //IF THE ARRAY LIST IS EMPTY
+            if(closestPOIs.isEmpty())
             {
-                //NEW CLOSEST POI. ADDS TO THE FRONT OF THE ARRAYLIST
-                //SHIFTS THE REMAINING ELEMENTS TO THE RIGHT
-                closestPOIs.add(counter, incomingPOI);
-
-                //IF ARRAYLIST SIZE IS GREATER THAN 5
-                if(closestPOIs.size() > maxPOIs)
-                {
-                    //REMOVE THE LAST POI
-                    closestPOIs.remove(maxPOIs - 1);
-                }
-                counter++;
+                closestPOIs.add(incomingPOI);
+                break;
             }
+
+            //IF INCOMING POI HAS A SHORTER OR EQUAL DISTANCE TO THE CURRENT ONE IN ARRAYLIST
+            else if((double)incomingPOI.getTag() <= (double)closestPOIs.get(counter).getTag())
+            {
+                //ADD TO LIST AND SHIFT REMAINING ELEMENTS TO THE RIGHT
+                closestPOIs.add(counter, incomingPOI);
+                break;
+            }
+
+            //IF REACHED LAST ITEM IN LIST (NOT!!! THE END OF THE  MAX CAPACITY)
+            //EX. 4 IS INCOMING AND CURRENTLIST IS (1, 2 , 3 , - , -)
+            //4 WILL BE ADDED AT THE END --> (1, 2, 3, 4, -)
+            else if(counter + 1 == listSize)
+            {
+                closestPOIs.add(incomingPOI);
+                break;
+            }
+        }
+        //IF OVERCAPACITY
+        //EX. 5 IS INCOMING AND CURRENTLIST IS (1, 2, 3, 4, 6)
+        //PRIOR IF STATEMENT WILL INSERT 5 AND PUSH 6 TO THE RIGHT
+        //NEW CURRENTLIST IS (1, 2, 3, 4, 5, 6)
+        //BUT NOW OVER CAPACITY. NEED TO REMOVE LAST.
+        if(closestPOIs.size() > maxPOIs)
+        {
+            closestPOIs.remove(maxPOIs);
         }
     }
 
-    public Marker findClosestPOI()
+    public void findClosestPOI()
     {
         //GETS THE X CLOSEST POIs TO CURRENT LOCATION
         getDistances();
-        Log.d("closest to you is", closestPOIs.get(0).getTitle());
-        return closestPOIs.get(0);
+        for(Marker closePOI : closestPOIs)
+        {
+            Toast.makeText(getBaseContext(), "closest to you: " + closePOI.getTitle(), Toast.LENGTH_SHORT).show();
+            closePOI.setVisible(true);
+            closePOI.showInfoWindow();
+        }
     }
 
-
+    private boolean getNearby = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -425,13 +454,28 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
+            mGoogleApiClient.connect();
         }
+
+
+
+
+
         if(!(intent.getStringArrayListExtra(SearchActivity.TAG_LIST) == null) &&
-            !intent.getStringArrayListExtra(SearchActivity.TAG_LIST).isEmpty())
-                 tags = intent.getStringArrayListExtra(SearchActivity.TAG_LIST);
+                !intent.getStringArrayListExtra(SearchActivity.TAG_LIST).isEmpty())
+            tags = intent.getStringArrayListExtra(SearchActivity.TAG_LIST);
 
         if(!(specificTag == null))
-                 specificTag = intent.getStringExtra(SearchActivity.SPECIFIC_SEARCH);
+            specificTag = intent.getStringExtra(SearchActivity.SPECIFIC_SEARCH);
+
+        //if NEAR_YOU is true, set the bool true.
+        if((intent.getBooleanExtra(NEAR_YOU, false)))
+        {
+            getNearby = true;
+            //in the onmapready method, before the filters go off, check this variable. if true, skip filtering and
+            //just get nearby locations. otherwise, business as usual.
+            //if this breaks, it's probably because of the if statement !//false
+        }
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
@@ -559,6 +603,18 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                     }
                     break;
+                case "Buildings":
+                    for(Marker mark : BuildingTag)
+                    {
+                        LatLng loc = mark.getPosition();
+                        mark.setVisible(true);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(loc)
+                                .title(mark.getTitle())
+                                .snippet(mark.getSnippet())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                    }
+                    break;
             }
         }
 
@@ -567,6 +623,20 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     {
         specificTag = specificTag.toUpperCase();
         for(Marker mark : FoodTag){
+            String title = mark.getTitle().toUpperCase();
+            String snippet = mark.getSnippet().toUpperCase();
+            if(title.contains(specificTag) || snippet.contains(specificTag))
+            {
+                LatLng loc = mark.getPosition();
+                mark.setVisible(true);
+                googleMap.addMarker(new MarkerOptions()
+                        .position(loc)
+                        .title(mark.getTitle())
+                        .snippet(mark.getSnippet())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            }
+        }
+        for(Marker mark : BuildingTag){
             String title = mark.getTitle().toUpperCase();
             String snippet = mark.getSnippet().toUpperCase();
             if(title.contains(specificTag) || snippet.contains(specificTag))
@@ -722,6 +792,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
 
+
+
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
@@ -731,7 +803,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         LatLngBounds CalPolyPomona = new LatLngBounds(
                 new LatLng(34.048039, -117.827632), new LatLng(34.063650, -117.810913));
         // Constrain the camera target to the CalPolyPomona bounds.
-        googleMap.setLatLngBoundsForCameraTarget(CalPolyPomona);
+        //googleMap.setLatLngBoundsForCameraTarget(CalPolyPomona);
 
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(CalPolyPomona.getCenter(), 1));
@@ -741,16 +813,30 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         // and move the map's camera to the same location.
         LatLng CPP = new LatLng(34.056484, -117.821605);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(CPP, 15));
-        if(!tags.isEmpty())
+
+
+
+        if(!tags.isEmpty() || specificTag != null)
+        {
             filtering = true;
-        if(!specificTag.equals(""))
-            filtering = true;
+        }
 
         if(!directionsActive){
             addMarkers();
             if(!markersAdded) updateTags(); //add lists to hashmap
             markersAdded = true; //there's actions we only want to perform once when addMarkers is called and
             //we only want to call updateTags() to add them to the hashmap once.
+
+            if(getNearby)
+            {
+                findClosestPOI();
+                for(Marker closePOI : closestPOIs)
+                {
+                    Toast.makeText(getBaseContext(), "NEARBYclosest to you: " + closePOI.getTitle(), Toast.LENGTH_SHORT).show();
+                    closePOI.setVisible(true);
+                    closePOI.showInfoWindow();
+                }
+            }
 
             if(filtering)
             {
@@ -764,38 +850,35 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
 
 
-        //googleMap.setOnInfoWindowClickListener(new ClickForDirectionsListener());
-        //googleMap.setInfoWindowAdapter(new MarkerWindow());
-
         bottomSheet = findViewById(R.id.design_bottom_sheet);
         behavior = BottomSheetBehavior.from(bottomSheet);
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapClickListener(this);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
+
+
         Button butt = (Button) findViewById(R.id.assButt);
         butt.setOnClickListener(this);
 
-        //findClosestPOI();
     }
 
     private void addMarkers() {
-
         //// Food Areas ////////////////////////////////////////////////////////////////
 
         Marker JambaBRICInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.054304, -117.820431))
                 .title("Jamba Juice [BRIC]")
                 .snippet("Straightforward counter-serve chain for smoothies, juices & health-focused light bites\n" +
-                "Hours:\n" +
-                "Monday -- Thursday\n" +
-                "8:00 am - 8:00 pm\n" +
-                "Friday\n" +
-                "7:00 am - 7:30 pm\t\n" +
-                "Saturday\n" +
-                "8:00 - 6:00 pm\t\n" +
-                "Sunday\n" +
-                "CLOSED\n"));
+                        "\nHours:\n" +
+                        "Monday - Thursday\n" +
+                        "8:00 AM - 8:00 PM\n" +
+                        "Friday\n" +
+                        "7:00 AM - 7:30 PM\t\n" +
+                        "Saturday\n" +
+                        "8:00 AM - 6:00 PM\t\n" +
+                        "Sunday\n" +
+                        "CLOSED\n"));
         if(!markersAdded) FoodTag.add(JambaBRICInfo);
 
         LatLng Einstein = new LatLng(34.061524,	-117.820143);
@@ -803,11 +886,11 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(Einstein)
                 .title("Einstein Bros. Bagels")
                 .snippet("Einstein Bros. Bagels is your neighborhood bagel shop. We're proud to provide our guests with freshly baked bagels, breakfast sandwiches, lunch sandwiches, salads, parfaits, smoothies, coffee, and catering. Stop on in!" +
-                        "Hours:\n" +
-                        "Monday -- Thursday\n" +
-                        "7:00 am - 7:00 pm\n" +
+                        "\nHours:\n" +
+                        "Monday - Thursday\n" +
+                        "7:00 AM - 7:00 PM\n" +
                         "Friday\n" +
-                        "7:00 am - 4:0 pm\t\n" +
+                        "7:00 AM - 4:00 PM\t\n" +
                         "Saturday -- Sunday\n" +
                         "CLOSED\n"));
         if(!markersAdded) FoodTag.add(EinsteinInfo);
@@ -817,12 +900,12 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(PonyExpress)
                 .title("Pony Express")
                 .snippet("Pony Express is a convenience store with a wide variety of grab-n-go items, including sandwiches, sushi, beverages, and other snacks. School supplies, health and beauty aids, and various other personal items are also sold at Pony Express." +
-                        "Hours:\n" +
-                        "Monday -- Thursday\n" +
-                        "7:30 am - 8:00 pm\n" +
+                        "\nHours:\n" +
+                        "Monday - Thursday\n" +
+                        "7:30 AM - 8:00 PM\n" +
                         "Friday\n" +
-                        "7:30 am - 3:00 pm\n" +
-                        "Saturday -- Sunday\n" +
+                        "7:30 AM - 3:00 PM\n" +
+                        "Saturday - Sunday\n" +
                         "CLOSED\n" ));
         if(!markersAdded) FoodTag.add(PonyExpressInfo);
 
@@ -831,16 +914,16 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(LosOlivos)
                 .title("Los Olivos")
                 .snippet("Features “all-you-care-to-eat” dining with many different dietary accommodations. Come in for a quick bite, or stay for a full meal! \n" +
-                        "Hours:\n" +
-                        "Monday -- Thursday\n" +
-                        "7:00 am - 8:00 pm\n" +
+                        "\nHours:\n" +
+                        "Monday - Thursday\n" +
+                        "7:00 AM - 8:00 PM\n" +
                         "Friday\n" +
-                        "7:00 am - 7:30 pm\t\n" +
+                        "7:00 AM - 7:30 PM\t\n" +
                         "Saturday\n" +
-                        "1:30 - 7:30 pm\n" +
+                        "1:30 - 7:30 PM\n" +
                         "Sunday\n" +
-                        "1:30 - 7:30 pm\n" +
-                        "Late night options available Mon- Wed, Sun: 9 pm - Midnight;\n"));
+                        "1:30 - 7:30 PM\n" +
+                        "Late night options available Mon - Wed, Sun: 9 PM - Midnight;\n"));
         if(!markersAdded) FoodTag.add(LosOlivosInfo);
 
         LatLng TheDen = new LatLng(34.053992, -117.818052);
@@ -848,15 +931,15 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(TheDen)
                 .title("The Den")
                 .snippet("Come in and you'll see that is not your dad's diner. This is a place with a vibe. For breakfast. At midnight. Whenever. Whyever. The look is lounge. The feel is easy-chair communal comfort zone. The menu is breakfast all-day, plus sandwiches, burritos, salads—all made the way we eat today. This is \"The Den.\" The next milestone in American dining from the people who invented American dining.\n" +
-                        "Hours: \n" +
-                        "Monday -- Thursday\n" +
-                        "9:00 am - 12:00 am\t\n" +
+                        "\nHours: \n" +
+                        "Monday - Thursday\n" +
+                        "9:00 AM - 12:00 AM\t\n" +
                         "Friday\n" +
-                        "9:00 am - 10:00 pm\t\n" +
+                        "9:00 AM - 10:00 PM\t\n" +
                         "Saturday\n" +
-                        "10:00 am - 10:00 pm\t\n" +
+                        "10:00 AM - 10:00 PM\t\n" +
                         "Sunday\n" +
-                        "10:00 am - 12:00 am\n"));
+                        "10:00 AM - 12:00 AM\n"));
         if(!markersAdded) FoodTag.add(TheDenInfo);
 
 
@@ -865,15 +948,15 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(VistaMarket)
                 .title("Vista Market")
                 .snippet("We are a fully stocked, one-stop-shop neighborhood store with a fun community vibe that offers personal items and the staples needed to prepare home-cooked meals. Every day, every palate, every need we've got you covered.\n" +
-                        "Hours: \n" +
-                        "Monday -- Thursday\n" +
-                        "7:00 am - 1:00 am\t\n" +
+                        "\nHours: \n" +
+                        "Monday - Thursday\n" +
+                        "7:00 AM - 1:00 AM\t\n" +
                         "Friday\n" +
-                        "7:00 am - 10:00 pm\t\n" +
+                        "7:00 AM - 10:00 PM\t\n" +
                         "Saturday\n" +
-                        "10:00 am - 10:00 pm\t\n" +
+                        "10:00 AM - 10:00 PM\t\n" +
                         "Sunday\n" +
-                        "10:00 am - 1:00 am\n"));
+                        "10:00 AM - 1:00 PM\n"));
         if(!markersAdded) FoodTag.add(VistaMarketInfo);
         if(!markersAdded) MarketTag.add(VistaMarketInfo);
 
@@ -889,15 +972,15 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(new LatLng(34.057578, -117.821447))
                 .title("Starbucks [Library]")
                 .snippet("Drop in and enjoy a cup of Starbucks before class, or stay a while and peruse the campus library. No matter what your needs, this fully-functioning Starbucks is here to serve you daily!\n" +
-                        "Hours\n" +
-                        "Monday -- Thursday\n" +
-                        "7:00 am - 10:00 pm\n" +
+                        "\nHours\n" +
+                        "Monday - Thursday\n" +
+                        "7:00 AM - 10:00 PM\n" +
                         "Friday\n" +
-                        "7:00 am - 5:00 pm\n" +
+                        "7:00 AM - 5:00 PM\n" +
                         "Saturday\n" +
-                        "10:00 am - 6:00 pm\n" +
+                        "10:00 AM - 6:00 PM\n" +
                         "Sunday\n" +
-                        "12:00 pm - 9:00 pm\n"));
+                        "12:00 PM - 9:00 PM\n"));
         if(!markersAdded) FoodTag.add(StarbucksLibInfo);
         if(!markersAdded) SocialTag.add(StarbucksLibInfo);
 
@@ -911,7 +994,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(new LatLng(34.048408, -117.819184))
                 .title("CPP Farm Store")
                 .snippet("Local and organic produce. Craft sodas, plants, wine, and gifts. Features a line of products from the campus farm, orchards, and nursery. \n" +
-                        "Open every day: 10:00 AM - 6:00PM\n"));
+                        "Open every day from 10:00 AM - 6:00PM\n"));
         if(!markersAdded) FoodTag.add(FarmStoreInfo);
 
         //// Visual POIs //////////////////////////////////////////////////////
@@ -1306,13 +1389,13 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(new LatLng(34.056015, -117.819429))
                 .title("Child Care Center")
                 .snippet("The Cal Poly Children's Center provide a safe and nurturing environment where student-parents can leave their children with confidence while they fulfill their educational goals and working parents can have peace of mind concerning their children’s wellbeing." +
-                        "Hours:\n" +
-                        "Monday -- Thursday\n" +
-                        "8:00 am - 8:00 pm\n" +
+                        "\nHours:\n" +
+                        "Monday - Thursday\n" +
+                        "8:00 AM - 8:00 PM\n" +
                         "Friday\n" +
-                        "7:00 am - 7:30 pm\\n" +
+                        "7:00 AM - 7:30 PM\\n" +
                         "Saturday\n" +
-                        "8:00 - 6:00 pm\n" +
+                        "8:00 - 6:00 PM\n" +
                         "Sunday\n" +
                         "CLOSED\n"));
         if(!markersAdded) ResourcesTag.add(ChildCenterInfo);
@@ -1332,9 +1415,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(new LatLng(34.057775, -117.827962))
                 .title("Health Services")
                 .snippet("Health Services offers visits with medical providers by appointment or through Urgent Care for non-life threatening sudden accidents or injuries." +
-                        "Hours:\n" +
-                        "Monday -- Friday\n" +
-                        "8:00 am - 5:00 pm\n" +
+                        "\nHours:\n" +
+                        "Monday - Friday\n" +
+                        "8:00 AM - 5:00 PM\n" +
                         "Saturday -- Sunday\n" +
                         "CLOSED\n"));
         if(!markersAdded) ResourcesTag.add(HealthCenterInfo);
@@ -1342,9 +1425,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Marker PoliceParkingInfo = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(34.060824, -117.815768))
                 .title("Police and Parking Services")
-                .snippet("Hours:\n" +
-                        "Monday -- Friday\n" +
-                        "8:00 am - 5:00 pm\n" +
+                .snippet("\nHours:\n" +
+                        "Monday - Friday\n" +
+                        "8:00 AM - 5:00 PM\n" +
                         "Saturday -- Sunday\n" +
                         "CLOSED\n"));
         if(!markersAdded) ResourcesTag.add(PoliceParkingInfo);
@@ -1359,13 +1442,13 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(new LatLng(34.054657, -117.820761))
                 .title("The BRIC")
                 .snippet("University gym open to all students of the university. The facilities include various exercise machines, basketball courts, racketball courts, studio rooms, a rock-climbing wall, and a pool. Various events and classes are held here, from movie showings in the pool to instructional exercise classes in the studios.\n" +
-                        "Hours: \n" +
-                        "Monday -- Thursday\n" +
-                        "6:00 am - 12:00 am\t\n" +
+                        "\nHours: \n" +
+                        "Monday - Thursday\n" +
+                        "6:00 AM - 12:00 AM\t\n" +
                         "Friday\n" +
-                        "6:00 am - 11:00 pm\t\n" +
-                        "Saturday -- Sunday\n" +
-                        "9:00 am - 11:00 pm\t"));
+                        "6:00 AM - 11:00 PM\t\n" +
+                        "Saturday - Sunday\n" +
+                        "9:00 AM - 11:00 PM\t"));
         if(!markersAdded) AthleticTag.add(BRICInfo);
         if(!markersAdded) SocialTag.add(BRICInfo);
 
@@ -1393,8 +1476,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(new LatLng(34.056549, -117.82146))
                 .title("Bronco Student Center [BSC]")
                 .snippet("Bronco Student Center. Home to on campus post office, dining, arcade, ATMs, and events. \n" +
-                        "Hours:\n" +
-                        "Monday - Friday 7:00 AM - 10:00 PM \n" +
+                        "\nHours:\n" +
+                        "Monday - Friday\n" +
+                        "7:00 AM - 10:00 PM \n" +
                         "Saturday 8:00 AM - 4:00 PM\n" +
                         "Sunday: Closed\n"));
         if(!markersAdded) ResourcesTag.add(BSCInfo);
@@ -1469,7 +1553,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                 .position(new LatLng(34.055368, -117.818887))
                 .title("Vista de las Estrellas")
                 .snippet("One of the five student residential suites. Estrellas, for the most part, is home to freshman students only. Furthermore, residents of the suite can retrieve mailed packages at the front desk in Estrellas. All suite residents have access to this building via key card. Contains a study hall, balcony overlook, and public laundry room.\n" +
-                        "Hours:\n" +
+                        "\nHours:\n" +
                         "Front Desk: 8:00 AM - 7:00 PM\n"));
         if(!markersAdded) HousingTag.add(EstrellasInfo);
 
@@ -1728,8 +1812,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
                         "\n\nBeginning Summer Quarter 2017:" +
                         "\n\tParking Permits: $154/ Quarter\n\tMotorcyles: $61/Quarter\n\tDaily Rate: $8/ Day"));
         if(!markersAdded) ParkingTag.add(LotStructure2);
-
-        hideInfoWindows();
     }
 
     @Override
@@ -1737,78 +1819,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         Log.d("CONNECTION FAILED", "you suck");
     }
 
-    private class ClickForDirectionsListener implements GoogleMap.OnInfoWindowClickListener {
-        @Override
-        public void onInfoWindowClick(Marker marker) {
-            if(!directionsActive) {
-                // Set Destination
-                dest = marker;
-                final String ssid = marker.getTitle();
-
-                Toast.makeText(getBaseContext(), "Destination set to " + ssid, Toast.LENGTH_SHORT).show();
-
-                // Clear Map
-                googleMap.clear();
-
-                // Set Marker
-                LatLng endPoint = dest.getPosition();
-                Marker destination = googleMap.addMarker(new MarkerOptions()
-                        .position(endPoint)
-                        .title(ssid)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-
-                // Calculate Route
-                LatLng user = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                String url = getUrl(user, endPoint);
-                Log.d("onMapClick", url.toString());
-                FetchUrl fetchUrl = new FetchUrl();
-
-                fetchUrl.execute(url);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(user));
-                directionsActive = true;
-            }
-            else {
-                googleMap.clear();
-                addMarkers();
-                directionsActive = false;
-            }
-        }
-    }
-
-    private class MarkerWindow implements GoogleMap.InfoWindowAdapter {
-        @Override
-        public View getInfoWindow(Marker marker) {
-            return null;
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            Context context = getApplicationContext();
-
-            LinearLayout info = new LinearLayout(context);
-            info.setOrientation(LinearLayout.VERTICAL);
-            info.setBackgroundColor(CPP_GREEN);
-            info.setPadding(0,0,0,0);
-            //info.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-            TextView title = new TextView(context);
-            title.setTextColor(Color.WHITE);
-            title.setGravity(Gravity.CENTER);
-            title.setTypeface(null, Typeface.BOLD_ITALIC);
-            title.setText(marker.getTitle());
-
-            TextView snippet = new TextView(context);
-            snippet.setTextColor(Color.WHITE);
-            //snippet.setTypeface(null, Typeface.BOLD);
-            snippet.setText(marker.getSnippet());
-            snippet.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            info.addView(title);
-            info.addView(snippet);
-            //ImageView image= new ImageView(context);
-            // image.setImageDrawable(ContextCompat.getDrawable(context, R.drawable));
-            return info;
-        }
-    }
 
     private String getUrl(LatLng origin, LatLng dest) {
 
@@ -1832,6 +1842,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+        findClosestPOI();
 
         return url;
     }
@@ -1991,12 +2003,13 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     @Override
     public boolean onMarkerClick(Marker marker) {
         dest = marker;
+        marker.hideInfoWindow();
         TextView title= (TextView) findViewById(R.id.bottomsheet_title);
         title.setText(marker.getTitle());
         TextView snippet= (TextView) findViewById(R.id.bottomsheet_snippet);
         snippet.setText(marker.getSnippet());
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        return false;
+        return true;
     }
 
 
@@ -2007,10 +2020,9 @@ public class MapsMarkerActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-
         // Set Destination
         final String ssid = dest.getTitle();
-
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         // Toast.makeText(getBaseContext(), "Destination set to " + ssid, Toast.LENGTH_SHORT).show();
 
         // Clear Map
@@ -2028,6 +2040,8 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         String url = getUrl(user, endPoint);
         Log.d("onMapClick", url.toString());
         FetchUrl fetchUrl = new FetchUrl();
+
+
 
         fetchUrl.execute(url);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(user));

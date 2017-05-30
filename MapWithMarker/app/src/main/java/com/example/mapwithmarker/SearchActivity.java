@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -66,6 +67,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private CheckBox chResource;
     private CheckBox chHousing;
     private CheckBox chParking;
+    private CheckBox chBuildings;
     private EditText txSpecific;
 
     boolean mLocationPermissionGranted = false;
@@ -95,9 +97,10 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         chResource = (CheckBox) findViewById(R.id.chResource);
         chHousing = (CheckBox) findViewById(R.id.chHousing);
         chParking = (CheckBox) findViewById(R.id.chParking);
+        chBuildings = (CheckBox) findViewById(R.id.chBuildings);
         txSpecific = (EditText) findViewById(R.id.txSpecific);
         Button btnSearch = (Button) findViewById(R.id.btnSearch);
-
+        Button btnNearYou = (Button) findViewById(R.id.btnNearYou);
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -109,6 +112,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         //assign listeners
+        btnNearYou.setOnClickListener(btnNearYouListener);
         btnSearch.setOnClickListener(btnListener);
         txSpecific.setOnClickListener(txListener);
         txSpecific.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -119,7 +123,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         Log.d("order: ", "onMapReady");
         //USE MARKER VISIBILITY
         //EX) CLICK SHOW ALL FOOD AND ONLY FOOD MARKERS WILL APPEAR
-        boolean filtering = false;
+       // boolean filtering = false;
 
         // Set a preference for minimum and maximum zoom.
         map.setMinZoomPreference(15.5f);
@@ -278,6 +282,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     };
     //extra keys
     public static final String SPECIFIC_SEARCH = "com.example.MapWithMarker.SPECIFIC_SEARCH";
+    public static final String NEAR_YOU = "com.example.MapWithMarker.NEAR_YOU";
     public static final String TAG_LIST = "com.example.MapWithMarker.TAGS";
     private View.OnClickListener btnListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -296,13 +301,26 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
         }
     };
-
+    private View.OnClickListener btnNearYouListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            // do something when the button is clicked
+            //create new intent
+            Intent intent = new Intent(SearchActivity.this, MapsMarkerActivity.class);
+            //add extras to intent for filtering
+            intent.putExtra(NEAR_YOU, true);
+            startActivity(intent);
+        }
+    };
     private void addTags() {
         if (chFood.isChecked()) {
             tags.add("Food");
         }
         if (chArt.isChecked()) {
             tags.add("Art");
+        }
+        if (chBuildings.isChecked())
+        {
+            tags.add("Buildings");
         }
         if (chAthletic.isChecked()) {
             tags.add("Athletic");
