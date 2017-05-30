@@ -435,11 +435,13 @@ public class MapsMarkerActivity extends AppCompatActivity implements
     {
         //GETS THE X CLOSEST POIs TO CURRENT LOCATION
         getDistances();
-        for(Marker closePOI : closestPOIs)
+        for(Marker POI : closestPOIs)
         {
-            Toast.makeText(getBaseContext(), "closest to you: " + closePOI.getTitle(), Toast.LENGTH_SHORT).show();
-            closePOI.setVisible(true);
-            closePOI.showInfoWindow();
+            Toast.makeText(getBaseContext(), "closest to you: " + POI.getTitle(), Toast.LENGTH_SHORT).show();
+            if(!POI.isVisible())
+            {
+                POI.setVisible(true);
+            }
         }
     }
 
