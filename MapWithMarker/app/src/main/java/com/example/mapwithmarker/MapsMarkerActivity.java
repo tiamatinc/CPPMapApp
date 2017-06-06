@@ -49,6 +49,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import static android.R.attr.max;
 import static android.R.attr.measureWithLargestChild;
 import static android.R.attr.x;
+import static com.example.mapwithmarker.SearchActivity.LAST_LOCATION;
 import static com.example.mapwithmarker.SearchActivity.NEAR_YOU;
 
 import org.json.JSONObject;
@@ -374,13 +375,26 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         double distanceBetween = 0.0;
 
 
+        Intent newIntent = getIntent();
+        double [] lastLocationCoords = newIntent.getDoubleArrayExtra(LAST_LOCATION);
 
         //FOR EACH KEY/ TAG IN THE POINTSOFINTEREST HASHMAP
+//        for (String key : PointsOfInterest.keySet()) {
+//            for (Marker POI : PointsOfInterest.get(key)) {
+//                //COMPUTE DISTANCE BETWEEN TWO POINTS (FROM AND TO) == (FROM CURRENT LOCATION TO POI)
+//                Log.d("currentlocation33", mLastLocation.getLatitude() + " " + mLastLocation.getLongitude());
+//                distanceBetween = SphericalUtil.computeDistanceBetween(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), POI.getPosition());
+//                Log.d("DISTANCEBETWEEN", "distanceBetween " + POI.getTitle() + " and you: " + distanceBetween);
+//                POI.setTag(distanceBetween);
+//                updateClosestPOIs(POI);
+//            }
+//        }
+
         for (String key : PointsOfInterest.keySet()) {
             for (Marker POI : PointsOfInterest.get(key)) {
                 //COMPUTE DISTANCE BETWEEN TWO POINTS (FROM AND TO) == (FROM CURRENT LOCATION TO POI)
-                Log.d("currentlocation33", mLastLocation.getLatitude() + " " + mLastLocation.getLongitude());
-                distanceBetween = SphericalUtil.computeDistanceBetween(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), POI.getPosition());
+                Log.d("currentlocation33", lastLocationCoords[0] + " " + lastLocationCoords[1]);
+                distanceBetween = SphericalUtil.computeDistanceBetween(new LatLng(lastLocationCoords[0], lastLocationCoords[1]), POI.getPosition());
                 Log.d("DISTANCEBETWEEN", "distanceBetween " + POI.getTitle() + " and you: " + distanceBetween);
                 POI.setTag(distanceBetween);
                 updateClosestPOIs(POI);
@@ -394,21 +408,28 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         int maxPOIs = 5;
         //ARRAYLIST SIZE
         int listSize = closestPOIs.size();;
-        for(int counter = 0; counter < maxPOIs; counter++)
+        boolean breakOut = false;
+        int counter = 0;
+        while(!breakOut)
         {
             //IF THE ARRAY LIST IS EMPTY
             if(closestPOIs.isEmpty())
             {
                 closestPOIs.add(incomingPOI);
-                break;
+                breakOut = true;
             }
 
-            //IF INCOMING POI HAS A SHORTER OR EQUAL DISTANCE TO THE CURRENT ONE IN ARRAYLIST
-            else if((double)incomingPOI.getTag() <= (double)closestPOIs.get(counter).getTag())
+            //IF INCOMING POI HAS A SHORTER TO THE CURRENT ONE IN ARRAYLIST
+            else if((double)incomingPOI.getTag() < (double)closestPOIs.get(counter).getTag())
             {
                 //ADD TO LIST AND SHIFT REMAINING ELEMENTS TO THE RIGHT
                 closestPOIs.add(counter, incomingPOI);
-                break;
+                breakOut = true;
+            }
+
+            else if((double)incomingPOI.getTag() == (double)closestPOIs.get(counter).getTag())
+            {
+                breakOut = true;
             }
 
             //IF REACHED LAST ITEM IN LIST (NOT!!! THE END OF THE  MAX CAPACITY)
@@ -417,8 +438,11 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             else if(counter + 1 == listSize)
             {
                 closestPOIs.add(incomingPOI);
-                break;
+                breakOut = true;
             }
+
+            if(counter == maxPOIs) breakOut = true;
+            counter++;
         }
         //IF OVERCAPACITY
         //EX. 5 IS INCOMING AND CURRENTLIST IS (1, 2, 3, 4, 6)
@@ -437,11 +461,13 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         getDistances();
         for(Marker POI : closestPOIs)
         {
-            Toast.makeText(getBaseContext(), "closest to you: " + POI.getTitle(), Toast.LENGTH_SHORT).show();
-            if(!POI.isVisible())
-            {
-                POI.setVisible(true);
-            }
+            //Toast.makeText(getBaseContext(), "closest to you: " + POI.getTitle(), Toast.LENGTH_SHORT).show();
+            LatLng loc = POI.getPosition();
+            googleMap.addMarker(new MarkerOptions()
+                    .position(loc)
+                    .title(POI.getTitle())
+                    .snippet(POI.getSnippet())
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         }
     }
 
@@ -459,10 +485,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             mGoogleApiClient.connect();
         }
 
-
-
-
-
         if(!(intent.getStringArrayListExtra(SearchActivity.TAG_LIST) == null) &&
                 !intent.getStringArrayListExtra(SearchActivity.TAG_LIST).isEmpty())
             tags = intent.getStringArrayListExtra(SearchActivity.TAG_LIST);
@@ -474,6 +496,7 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         if((intent.getBooleanExtra(NEAR_YOU, false)))
         {
             getNearby = true;
+
             //in the onmapready method, before the filters go off, check this variable. if true, skip filtering and
             //just get nearby locations. otherwise, business as usual.
             //if this breaks, it's probably because of the if statement !//false
@@ -829,15 +852,13 @@ public class MapsMarkerActivity extends AppCompatActivity implements
             markersAdded = true; //there's actions we only want to perform once when addMarkers is called and
             //we only want to call updateTags() to add them to the hashmap once.
 
-            if(getNearby)
-            {
+            if(getNearby){
+
+                //GET ALL INTENT INFORMATION FROM OTHER ACTIVITIES
+                googleMap.clear();
                 findClosestPOI();
-                for(Marker closePOI : closestPOIs)
-                {
-                    Toast.makeText(getBaseContext(), "NEARBYclosest to you: " + closePOI.getTitle(), Toast.LENGTH_SHORT).show();
-                    closePOI.setVisible(true);
-                    closePOI.showInfoWindow();
-                }
+                //getNearby = false;
+                closestPOIs.clear();
             }
 
             if(filtering)
@@ -1845,8 +1866,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-        findClosestPOI();
-
         return url;
     }
 
@@ -2042,7 +2061,6 @@ public class MapsMarkerActivity extends AppCompatActivity implements
         String url = getUrl(user, endPoint);
         Log.d("onMapClick", url.toString());
         FetchUrl fetchUrl = new FetchUrl();
-
 
 
         fetchUrl.execute(url);

@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -81,6 +82,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private static final float DEFAULT_ZOOM = 1;
     private LatLng mDefaultLocation = new LatLng(34.056484, -117.821605);
     private final int CPP_GREEN= Color.rgb(32, 74, 0);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,13 +143,14 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
+        //Log.d("testingCurrentLocation", mLastLocation.getLatitude() + "");
 
         // CREATES A BOUNDARY AROUND CPP
         // Create a LatLngBounds that includes the campus of Cal Poly Pomona
         LatLngBounds CalPolyPomona = new LatLngBounds(
                 new LatLng(34.048039, -117.827632), new LatLng(34.063650, -117.810913));
         // Constrain the camera target to the CalPolyPomona bounds.
-        map.setLatLngBoundsForCameraTarget(CalPolyPomona);
+        //map.setLatLngBoundsForCameraTarget(CalPolyPomona);
 
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(CalPolyPomona.getCenter(), 1));
@@ -232,7 +235,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
      * null in rare cases when a location is not available.
      */
         Log.d("deviceLocation", "CALLED");
-        if (!mLocationPermissionGranted) {
+        mGoogleApiClient.connect();
+        if (mLocationPermissionGranted) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -274,6 +278,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             map.getUiSettings().setMyLocationButtonEnabled(false);
         }
     }
+
     private View.OnClickListener txListener = new View.OnClickListener() {
         public void onClick(View v) {
             // do something when the button is clicked
@@ -283,6 +288,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     //extra keys
     public static final String SPECIFIC_SEARCH = "com.example.MapWithMarker.SPECIFIC_SEARCH";
     public static final String NEAR_YOU = "com.example.MapWithMarker.NEAR_YOU";
+    public static final String LAST_LOCATION = "com.example.MapWithMarker.LAST_LOCATION";
     public static final String TAG_LIST = "com.example.MapWithMarker.TAGS";
     private View.OnClickListener btnListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -308,6 +314,10 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             Intent intent = new Intent(SearchActivity.this, MapsMarkerActivity.class);
             //add extras to intent for filtering
             intent.putExtra(NEAR_YOU, true);
+            Log.d("lastCoords", "TESET TEST TEST");
+            double [] lastLocationCoords = {mLastLocation.getLatitude(), mLastLocation.getLongitude()};
+
+            intent.putExtra(LAST_LOCATION, lastLocationCoords);
             startActivity(intent);
         }
     };
@@ -352,7 +362,30 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnected(Bundle bundle) {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION);
+            return;
+        }
+
+        if (mGoogleApiClient.isConnected()) {
+            Log.d("clientConnected", "YES");
+        }
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
     }
 
     @Override
